@@ -1,0 +1,18 @@
+<section class="customer-card customer-card-hero">
+  <div class="customer-card-head">
+    <span class="customer-eyebrow">رحلة العميل</span>
+    <h1>طلباتي</h1>
+    <p>استعرض جميع الطلبات المرتبطة بجلسة العميل الحالية مع الحالة، الإجمالي، وآخر تحديث لكل طلب بنفس الهوية البصرية لسدادي.</p>
+  </div>
+  <div class="customer-hero-pills" aria-hidden="true">
+    <span class="customer-hero-pill">حالة التنفيذ</span>
+    <span class="customer-hero-pill">آخر تحديث</span>
+    <span class="customer-hero-pill">المستندات النهائية</span>
+  </div>
+  <div id="customerOrdersFeedback" class="customer-feedback" hidden></div>
+  <div id="customerOrdersSummary" class="customer-summary-strip" hidden></div>
+  <div id="customerOrdersList" class="customer-list">
+    <div class="customer-empty-state">جارٍ تحميل الطلبات...</div>
+  </div>
+  {% include "components/sadady/customer/customer-order-card.twig" %}
+</section>

@@ -1,0 +1,17 @@
+{% extends "layouts/landing.twig" %}
+
+{% block title %}تفاصيل الطلب | سدادي{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{ 'css/sadady-customer.css' | asset }}">
+{% endblock %}
+
+{% block landing_content %}
+  <main class="customer-page">
+    {% include "components/sadady/customer/customer-order-details.twig" %}
+  </main>
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{{ 'js/sadady/customer-orders.js' | asset }}"></script>
+{% endblock %}

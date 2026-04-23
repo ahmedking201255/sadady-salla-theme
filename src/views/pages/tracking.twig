@@ -1,0 +1,18 @@
+{% extends "layouts/landing.twig" %}
+
+{% block title %}تتبع الطلب | سدادي{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{ 'css/sadady-tracking.css' | asset }}">
+{% endblock %}
+
+{% block landing_content %}
+  <main class="tracking-page">
+    {% include "components/sadady/tracking/tracking-search-form.twig" %}
+    {% include "components/sadady/tracking/tracking-result-card.twig" %}
+  </main>
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{{ 'js/sadady/tracking.js' | asset }}"></script>
+{% endblock %}

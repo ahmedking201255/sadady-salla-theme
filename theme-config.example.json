@@ -1,0 +1,17 @@
+{
+  "brand_name": "Sadady",
+  "brand_subtitle": "منصة سداد وتقسيط الفواتير",
+  "brand_logo_url": "https://sadady.com/assets/logo.png",
+  "favicon_url": "https://sadady.com/favicon.ico",
+  "home_url": "/",
+  "hero_title": "سدادي تسدد عنك فواتير سداد فورًا<br>وأنت قسّطها على راحتك",
+  "hero_subtitle": "أدخل رقم فاتورة سداد… ونحن نسددها فورًا وأنت قسّطها براحتك.",
+  "support_phone": "966500000000",
+  "support_email": "care@sadady.com",
+  "primary_color": "#f97316",
+  "primary_color_alt": "#fb923c",
+  "success_color": "#10b981",
+  "surface_start": "#fff7ed",
+  "surface_mid": "#ffffff",
+  "surface_end": "#fffaf5"
+}

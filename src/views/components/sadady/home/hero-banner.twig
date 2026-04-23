@@ -1,0 +1,59 @@
+<section class="hero">
+  <div class="hero-box">
+    <div class="hero-grid">
+      <div>
+        <span class="hero-eyebrow">رحلة الطلب داخل سلة</span>
+        <h1 data-theme-text="hero_title">سدادي تسدد عنك فواتير سداد فورًا<br>وأنت قسّطها على راحتك</h1>
+        <p data-theme-text="hero_subtitle">أدخل رقم فاتورة سداد أو بيانات الفاتورة الأخرى، وسدادي تحسب الرسوم وتجهز مسار التنفيذ والمتابعة من واجهة واحدة أنيقة.</p>
+
+        <div class="chips">
+          <span class="chip">⚡ الكهرباء</span>
+          <span class="chip">📶 الاتصالات</span>
+          <span class="chip">💧 المياه</span>
+          <span class="chip">✈️ الطيران</span>
+          <span class="chip">🏛️ حكومي</span>
+          <span class="chip">🏫 المدارس</span>
+          <span class="chip">🏥 المستشفيات</span>
+          <span class="chip">📄 الإيجارات</span>
+          <span class="chip">🏗️ المقاولات</span>
+        </div>
+
+        <div class="hero-actions">
+          <button class="btn btn-orange" type="button" data-open-request-modal data-request-flow="sadad">💳 قسط مدفوعات سداد الآن</button>
+          <button class="btn btn-orange btn-ghost-accent" type="button" data-open-request-modal data-request-flow="external">🧾 تقسيط فواتير أخرى خارج سداد</button>
+        </div>
+
+        <div class="hero-session-note" data-sadady-session-hero>
+          <strong data-sadady-session-title>سيتم ربط الطلبات بحسابك داخل سلة تلقائيًا</strong>
+          <span data-sadady-session-subtitle>إذا كنت مسجل الدخول فسيتم استخدام هويتك الحالية وربط الطلبات والمستندات تلقائيًا بنفس الحساب.</span>
+        </div>
+
+        {% include "components/sadady/home/providers-strip.twig" %}
+      </div>
+
+      <div class="mobile-preview">
+        <div class="phone">
+          <div class="phone-top">
+            <span>9:41</span>
+            <span>سدادي</span>
+          </div>
+          <div class="phone-card">
+            <div class="phone-icon">⚡</div>
+            <h3>منصة سدادي<br>سددت عنك فاتورة<br>الكهرباء الآن</h3>
+            <div class="phone-grid">
+              <div class="mini-card">
+                <div class="mini-label">اسم الخدمة</div>
+                <div class="mini-value">الكهرباء</div>
+              </div>
+              <div class="mini-card">
+                <div class="mini-label">إجمالي الفاتورة</div>
+                <div class="mini-value">299 ريال</div>
+              </div>
+            </div>
+            <button class="success-wide" type="button">✔ تم السداد بنجاح</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

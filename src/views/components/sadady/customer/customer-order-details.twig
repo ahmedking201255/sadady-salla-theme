@@ -1,0 +1,44 @@
+<section class="customer-card customer-card-hero">
+  <div class="customer-card-head">
+    <span class="customer-eyebrow">تفاصيل التنفيذ</span>
+    <h1>تفاصيل الطلب</h1>
+    <p>ملخص الطلب، حالة التنفيذ، آخر تحديث من فريق التشغيل، والمستندات النهائية الخاصة بالعميل.</p>
+  </div>
+  <div id="customerOrderFeedback" class="customer-feedback" hidden></div>
+  <div id="customerOrderDetailHeader" class="customer-order-header" hidden>
+    <div>
+      <div class="customer-order-eyebrow">رقم التتبع</div>
+      <h2 id="customerOrderTrackingNumber">-</h2>
+    </div>
+    <span id="customerOrderStatusChip" class="status-chip">-</span>
+  </div>
+  <div id="customerOrderDetailGrid" class="detail-grid">
+    <div class="detail-box"><span>رقم الطلب</span><strong id="customerOrderPublicId">-</strong></div>
+    <div class="detail-box"><span>رقم طلب سلة</span><strong id="customerOrderSallaOrderNumber">-</strong></div>
+    <div class="detail-box"><span>نوع الفاتورة</span><strong id="customerOrderInvoiceType">-</strong></div>
+    <div class="detail-box"><span>نوع الخدمة</span><strong id="customerOrderServiceType">-</strong></div>
+    <div class="detail-box"><span>الحالة</span><strong id="customerOrderStatusLabel">-</strong></div>
+    <div class="detail-box"><span>شركة التقسيط</span><strong id="customerOrderProviderName">-</strong></div>
+    <div class="detail-box"><span>اسم المفوتر</span><strong id="customerOrderBillerName">-</strong></div>
+    <div class="detail-box"><span>رقم الفاتورة</span><strong id="customerOrderBillNumber">-</strong></div>
+    <div class="detail-box"><span>رقم الموافقة</span><strong id="customerOrderApprovalReference">-</strong></div>
+    <div class="detail-box"><span>مبلغ الفاتورة</span><strong id="customerOrderInvoiceAmount">-</strong></div>
+    <div class="detail-box"><span>الإجمالي</span><strong id="customerOrderTotalAmount">-</strong></div>
+    <div class="detail-box"><span>حالة التحصيل</span><strong id="customerOrderCollectionStatus">-</strong></div>
+    <div class="detail-box"><span>مزامنة سلة</span><strong id="customerOrderSallaSyncStatus">-</strong></div>
+    <div class="detail-box"><span>مزامنة شركة التقسيط</span><strong id="customerOrderProviderSyncStatus">-</strong></div>
+  </div>
+  <section class="customer-card customer-card-nested customer-feedback-loop">
+    <h2>آخر تحديث من فريق التنفيذ</h2>
+    <div id="customerOpsLoop" class="customer-loop-grid">
+      <div class="customer-empty-state">جارٍ تجهيز آخر تحديث...</div>
+    </div>
+  </section>
+  <section class="customer-card customer-card-nested">
+    <h2>تسلسل الحالة</h2>
+    <div id="customerOrderTimeline" class="customer-timeline">
+      <div class="customer-empty-state">جارٍ تحميل أحداث الطلب...</div>
+    </div>
+  </section>
+  {% include "components/sadady/customer/customer-documents-list.twig" %}
+</section>

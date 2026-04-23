@@ -1,0 +1,19 @@
+{% extends "layouts/landing.twig" %}
+
+{% block title %}الإشعارات | سدادي{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{ 'css/sadady-customer.css' | asset }}">
+{% endblock %}
+
+{% block landing_content %}
+  <main class="customer-page">
+    {% hook 'customer:notifications.items.start' %}
+    {% include "components/sadady/customer/customer-notifications-list.twig" %}
+    {% hook 'customer:notifications.items.end' %}
+  </main>
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{{ 'js/sadady/customer-orders.js' | asset }}"></script>
+{% endblock %}

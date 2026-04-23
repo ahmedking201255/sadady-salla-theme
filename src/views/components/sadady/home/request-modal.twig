@@ -1,0 +1,29 @@
+<div id="requestModal" class="request-modal" hidden>
+  <div class="request-modal-backdrop" data-close-request-modal></div>
+  <div class="request-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="requestModalTitle">
+    <div class="request-modal-shell">
+      <div class="request-modal-header">
+        <div>
+          <span class="request-modal-kicker">رحلة الطلب</span>
+          <h2 id="requestModalTitle">ابدأ طلبك من نافذة واحدة</h2>
+          <p>اختر نوع الخدمة، املأ البيانات، ثم أكمل احتساب الرسوم والانتقال إلى ملخص الطلب داخل نفس التجربة.</p>
+        </div>
+        <button id="closeRequestModalBtn" class="request-modal-close" type="button" aria-label="إغلاق">×</button>
+      </div>
+
+      <div class="request-modal-tabs" role="tablist" aria-label="أنواع الطلب">
+        <button class="request-modal-tab is-active" type="button" role="tab" aria-selected="true" data-request-modal-tab="sadad">تقسيط مدفوعات سداد</button>
+        <button class="request-modal-tab" type="button" role="tab" aria-selected="false" data-request-modal-tab="external">تقسيط فواتير أخرى</button>
+      </div>
+
+      <div class="request-modal-panels">
+        <div class="request-modal-panel is-active" data-request-panel="sadad">
+          {% include "components/sadady/home/request-form-sadad.twig" %}
+        </div>
+        <div class="request-modal-panel" data-request-panel="external" hidden>
+          {% include "components/sadady/home/request-form-external.twig" %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+{% extends "layouts/master.twig" %}
+
+{% block content %}
+  <div class="container">
+    {% include "components/sadady/layout/header.twig" %}
+    {% include "components/sadady/layout/session-strip.twig" %}
+    {% block landing_content %}{% endblock %}
+    {% include "components/sadady/layout/footer.twig" %}
+  </div>
+  {% include "components/sadady/journey/summary-modal.twig" %}
+{% endblock %}

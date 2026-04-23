@@ -1,0 +1,19 @@
+{
+  "sadady.theme.name": "سدادي",
+  "sadady.theme.description": "منصة سداد وتقسيط الفواتير داخل سلة",
+  "sadady.header.home": "العودة إلى الصفحة الرئيسية",
+  "sadady.header.about": "من نحن",
+  "sadady.header.how_it_works": "كيف تعمل الخدمة",
+  "sadady.header.contact": "تواصل معنا",
+  "sadady.header.policy": "سياسة الاستخدام",
+  "sadady.header.login": "تسجيل الدخول",
+  "sadady.header.login_hint": "الدخول يتم عبر حساب سلة مباشرة.",
+  "sadady.footer.back_home": "العودة للرئيسية",
+  "sadady.session.eyebrow": "جلسة سلة",
+  "sadady.session.connected": "مرتبطة بحساب سلة",
+  "sadady.session.disconnected": "لم يتم الربط مع سلة بعد",
+  "sadady.session.subtitle": "سجّل دخولك من سلة حتى تظهر الطلبات والتتبع والملفات المرتبطة بحسابك.",
+  "sadady.session.name": "اسم العميل",
+  "sadady.session.mobile": "الجوال",
+  "sadady.session.id": "هوية سلة"
+}

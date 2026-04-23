@@ -1,0 +1,17 @@
+{% extends "layouts/landing.twig" %}
+
+{% block title %}تم إنشاء الطلب | سدادي{% endblock %}
+
+{% block landing_content %}
+  <main class="journey-page">
+    {% hook 'thank-you:start' %}
+    {% hook 'thank-you:items.start' %}
+    {% include "components/sadady/journey/success-card.twig" %}
+    {% hook 'thank-you:items.end' %}
+    {% hook 'thank-you:end' %}
+  </main>
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{{ 'js/sadady/thank-you.js' | asset }}"></script>
+{% endblock %}

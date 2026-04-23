@@ -1,0 +1,18 @@
+{
+  "name": "sadady-salla-theme",
+  "version": "1.0.40",
+  "private": true,
+  "description": "Private Sadady Salla theme with static home and API-backed customer journeys",
+  "scripts": {
+    "validate": "node ./scripts/validate-theme.mjs",
+    "release:check": "node ./scripts/validate-release.mjs",
+    "salla:reset-state": "node ./scripts/reset-salla-cli-state.mjs",
+    "lint": "npm run validate",
+    "development": "node ./scripts/prepare-preview-assets.mjs",
+    "watch": "node ./scripts/prepare-preview-assets.mjs",
+    "build": "npm run validate && npm run release:check",
+    "prod": "npm run build",
+    "preview": "npm run validate",
+    "preview:local": "node ./scripts/render-local-preview.mjs"
+  }
+}

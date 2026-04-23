@@ -1,0 +1,67 @@
+<section id="request" class="request-box">
+  <h2>طلب تقسيط مدفوعات سداد</h2>
+
+  <div class="form-grid">
+    <div class="field">
+      <label>اسم الشركة المفوترة</label>
+      <input id="sadadBillerName" placeholder="مثال: شركة الكهرباء">
+    </div>
+
+    <div class="field full">
+      <label>بيانات السداد</label>
+      <div class="form-grid">
+        <input id="sadadBillerCode" placeholder="رمز المفوتر">
+        <input id="sadadBillNumber" placeholder="رقم (الفاتورة / الاشتراك / المفوترة)">
+      </div>
+    </div>
+
+    <div class="field">
+      <input id="sadadIdentity" placeholder="رقم الهوية / رقم الإقامة / رقم السجل التجاري / التاريخ (إن طُلب)">
+    </div>
+
+    <div class="field">
+      <input id="sadadNote" placeholder="ملاحظة (اختياري)">
+    </div>
+
+    <div class="field full">
+      <label>مبلغ فاتورة السداد</label>
+      <input id="sadadInvoiceAmount" placeholder="مبلغ فاتورة السداد (مثال: 250 ريال)">
+    </div>
+  </div>
+
+  <div class="notice">
+    <strong>ملاحظة:</strong>
+    بعض الجهات قد تطلب بيانات إضافية مثل رقم الهوية أو السجل التجاري أو التاريخ حسب نوع الفاتورة.
+  </div>
+
+  <label class="upload-box" for="sadadInvoiceFile">
+    <div class="upload-icon">📄</div>
+    <div class="upload-title">اضغط هنا لرفع الفاتورة</div>
+    <div class="upload-subtitle">PDF / JPG / PNG</div>
+    <div id="sadadUploadFileName" class="upload-file"></div>
+    <input id="sadadInvoiceFile" type="file" accept=".pdf,.jpg,.jpeg,.png">
+  </label>
+
+  <div class="speed-section">
+    <label class="speed-label">اختر طريقة سداد الفاتورة</label>
+    <div class="speed-grid">
+      <label class="speed-option hours">
+        <input type="radio" name="speed" value="خلال ساعات العمل" checked>
+        <div class="speed-option-title">خلال ساعات العمل</div>
+        <div class="speed-option-caption">تنفيذ الطلب خلال ساعات العمل الرسمية.</div>
+      </label>
+
+      <label class="speed-option fast">
+        <input type="radio" name="speed" value="خلال 15 دقيقة">
+        <div class="speed-option-title">خلال 15 دقيقة</div>
+        <div class="speed-option-caption">خيار سريع للحالات المستعجلة.</div>
+      </label>
+    </div>
+  </div>
+
+  <div class="submit-area">
+    <button id="sadadSubmitBtn" class="btn btn-green submit-btn-wide" type="button">ابدأ التقسيط الآن</button>
+  </div>
+
+  <div id="sadadFeedback" class="form-feedback" hidden></div>
+</section>

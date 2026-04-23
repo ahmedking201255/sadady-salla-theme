@@ -1,0 +1,59 @@
+<div class="section-divider"><span>فواتير أخرى خارج سداد</span></div>
+
+<section id="otherRequest" class="request-box external-request-box">
+  <h2>طلب تقسيط فواتير أخرى</h2>
+  <p class="section-lead">خدمة مخصصة لدفع وتقسيط الفواتير الأخرى خارج سداد، مع تحويل المبلغ للمستفيد بعد مراجعة الطلب.</p>
+
+  <div class="form-grid">
+    <div class="field">
+      <label>اسم المستفيد</label>
+      <input id="otherBeneficiaryName" placeholder="اكتب اسم المستفيد">
+    </div>
+
+    <div class="field">
+      <label>مبلغ الفاتورة</label>
+      <input id="otherInvoiceAmount" placeholder="مثال: 1500 ريال">
+    </div>
+
+    <div class="field">
+      <label>هاتف المستفيد</label>
+      <input id="otherBeneficiaryPhone" placeholder="05xxxxxxxx">
+    </div>
+
+    <div class="field">
+      <label>آيبان المستفيد</label>
+      <input id="otherIban" placeholder="SA00 0000 0000 0000 0000 0000">
+    </div>
+  </div>
+
+  <label class="upload-box" for="otherInvoiceFile">
+    <div class="upload-icon">🧾</div>
+    <div class="upload-title">اضغط هنا لرفع الفاتورة</div>
+    <div class="upload-subtitle">PDF / JPG / PNG</div>
+    <div id="otherUploadFileName" class="upload-file"></div>
+    <input id="otherInvoiceFile" type="file" accept=".pdf,.jpg,.jpeg,.png">
+  </label>
+
+  <div class="speed-section">
+    <label class="speed-label">اختر سرعة تنفيذ الطلب</label>
+    <div class="speed-grid">
+      <label class="speed-option hours">
+        <input type="radio" name="otherSpeedChoice" value="خلال ساعات العمل" checked>
+        <div class="speed-option-title">خلال ساعات العمل</div>
+        <div class="speed-option-caption">تنفيذ الطلب خلال ساعات العمل الرسمية.</div>
+      </label>
+
+      <label class="speed-option fast">
+        <input type="radio" name="otherSpeedChoice" value="خلال 15 دقيقة">
+        <div class="speed-option-title">خلال 15 دقيقة</div>
+        <div class="speed-option-caption">خيار سريع للحالات المستعجلة.</div>
+      </label>
+    </div>
+  </div>
+
+  <div class="submit-area">
+    <button id="otherSubmitBtn" class="btn btn-green submit-btn-wide" type="button">ابدأ التقسيط الآن</button>
+  </div>
+
+  <div id="otherFeedback" class="form-feedback" hidden></div>
+</section>

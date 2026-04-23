@@ -1,0 +1,44 @@
+<div id="requestFlowModal" class="flow-modal" hidden>
+  <div class="flow-box">
+    <div class="summary-header">
+      <h2 class="summary-page-title">ملخص الطلب</h2>
+      <button class="summary-back" id="backFlowBtn" type="button">←</button>
+    </div>
+    <p class="summary-intro">بعد المراجعة النهائية سيُحفظ الطلب داخل حساب سلة ثم تنتقل مباشرة إلى صفحة العميل أو التتبع حسب الحالة.</p>
+
+    <div class="summary-list">
+      <div class="summary-item">
+        <div class="summary-item-label">نوع الخدمة</div>
+        <div class="summary-item-value" id="summarySpeed">خلال ساعات العمل</div>
+      </div>
+
+      <div class="summary-item">
+        <div class="summary-item-label">مبلغ الفاتورة</div>
+        <div class="summary-item-value" id="summaryInvoice">SAR 0.00</div>
+      </div>
+
+      <div class="summary-item">
+        <div class="summary-item-label">رسوم الخدمة</div>
+        <div class="summary-item-value" id="summaryFee">SAR 0.00</div>
+      </div>
+
+      <div class="summary-item">
+        <div class="summary-item-label">ضريبة رسوم الخدمة</div>
+        <div class="summary-item-value" id="summaryVat">SAR 0.00</div>
+      </div>
+
+      <div class="summary-item total">
+        <div class="summary-item-label">الإجمالي</div>
+        <div class="summary-item-value" id="summaryTotal">SAR 0.00</div>
+      </div>
+    </div>
+
+    <div class="summary-next-step" id="summaryNextStep">سيتم حفظ الرحلة ثم الانتقال إلى إتمام الطلب داخل سلة.</div>
+
+    <div class="summary-actions">
+      <p id="summaryNote" class="summary-note">سيتم حفظ الملخص على حساب سلة الحالي ثم تحويلك لإتمام الطلب.</p>
+      <button class="summary-submit" id="toCompleteBtn" type="button">إتمام الطلب</button>
+      <button class="summary-close" id="finishFlowBtn" type="button">إغلاق</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<template id="customerOrderCardTemplate">
+  <article class="order-card">
+    <div class="order-card-main">
+      <div class="order-card-headline">
+        <strong class="order-number" data-order-number>SD-000001</strong>
+        <span class="order-inline-separator" aria-hidden="true"></span>
+        <a class="order-link" data-order-link href="/customer/orders/single">عرض التفاصيل</a>
+      </div>
+      <div class="order-meta" data-order-meta>سداد • خلال ساعات العمل</div>
+      <div class="order-micro-grid">
+        <div class="order-micro-item">
+          <span>الخدمة</span>
+          <strong data-order-meta-secondary>فاتورة سداد</strong>
+        </div>
+        <div class="order-micro-item">
+          <span>رقم سلة</span>
+          <strong data-order-salla-number>-</strong>
+        </div>
+        <div class="order-micro-item">
+          <span>آخر تحديث</span>
+          <strong data-order-submeta>آخر تحديث</strong>
+        </div>
+      </div>
+    </div>
+    <div class="order-side">
+      <span class="status-chip" data-order-status>created</span>
+      <strong class="order-total" data-order-total>SAR 0.00</strong>
+      <span class="order-side-caption">الإجمالي النهائي</span>
+    </div>
+  </article>
+</template>

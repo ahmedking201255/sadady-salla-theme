@@ -1,0 +1,35 @@
+{
+    "name": {
+        "ar": "سدادي",
+        "en": "Sadady"
+    },
+    "theme_name": "Sadady",
+    "author": "Sadady",
+    "author_email": "support@sadady.com",
+    "version": "1.0.40",
+    "repository": "https://github.com/hmadaloba-droid/sadady-salla-theme",
+    "repo_url": "https://github.com/hmadaloba-droid/sadady-salla-theme",
+    "support_url": "https://sadady.com",
+    "settings": [
+        {
+            "id": "api_base_url",
+            "type": "string",
+            "label": "Sadady API Base URL",
+            "format": "string",
+            "value": "https://api.sadady.com"
+        },
+        {
+            "id": "support_email",
+            "type": "string",
+            "label": "Support Email",
+            "format": "string",
+            "value": "support@sadady.com"
+        }
+    ],
+    "features": [],
+    "components": [],
+    "description": {
+        "ar": null,
+        "en": null
+    }
+}

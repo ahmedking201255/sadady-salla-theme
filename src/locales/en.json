@@ -1,0 +1,19 @@
+{
+  "sadady.theme.name": "Sadady",
+  "sadady.theme.description": "Invoice settlement and installment experience inside Salla",
+  "sadady.header.home": "Back to home",
+  "sadady.header.about": "About us",
+  "sadady.header.how_it_works": "How it works",
+  "sadady.header.contact": "Contact us",
+  "sadady.header.policy": "Usage policy",
+  "sadady.header.login": "Login",
+  "sadady.header.login_hint": "Login is handled directly through your Salla account.",
+  "sadady.footer.back_home": "Back to home",
+  "sadady.session.eyebrow": "Salla Session",
+  "sadady.session.connected": "Connected to Salla account",
+  "sadady.session.disconnected": "Not connected to Salla yet",
+  "sadady.session.subtitle": "Sign in with Salla to load orders, tracking, and files linked to your account.",
+  "sadady.session.name": "Customer",
+  "sadady.session.mobile": "Mobile",
+  "sadady.session.id": "Salla ID"
+}

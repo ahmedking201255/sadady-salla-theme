@@ -1,0 +1,26 @@
+<header class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <a class="brand-link" href="/" data-theme-href="home_url" aria-label="{{ trans('sadady.header.home') }}">
+        <img class="brand-logo" data-theme-src="brand_logo_url" data-theme-alt="brand_name" src="{{ 'images/logo-default.svg' | asset }}" alt="Sadady" hidden>
+        <div>
+          <div class="logo-text" data-theme-text="brand_name">Sadady</div>
+          <div class="brand-sub" data-theme-text="brand_subtitle">منصة سداد وتقسيط الفواتير</div>
+        </div>
+      </a>
+    </div>
+    <nav class="nav" id="mainNav">
+      <div class="nav-links">
+        <a href="#top">{{ trans('sadady.header.about') }}</a>
+        <a href="#" data-open-request-modal data-request-flow="sadad">{{ trans('sadady.header.how_it_works') }}</a>
+        <a href="#policy">{{ trans('sadady.header.contact') }}</a>
+        <a href="#policy">{{ trans('sadady.header.policy') }}</a>
+      </div>
+      <div class="nav-actions">
+        <button class="lang-btn" type="button">EN</button>
+        <button id="goToCustomerBtn" class="btn btn-login" type="button">{{ trans('sadady.header.login') }}</button>
+      </div>
+      <div class="login-hint" id="loginHint">{{ trans('sadady.header.login_hint') }}</div>
+    </nav>
+  </div>
+</header>
