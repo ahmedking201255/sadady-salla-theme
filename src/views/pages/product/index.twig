@@ -1,0 +1,10 @@
+{% extends "layouts/landing.twig" %}
+
+{% block title %}المنتجات{% endblock %}
+
+{% block landing_content %}
+  {% set page_kicker = 'المنتجات' %}
+  {% set page_title = 'منتجات المتجر' %}
+  {% set page_description = 'سدادي يعتمد على رحلة طلب خدمة مخصصة، وهذه صفحة توافقية لقوائم المنتجات في سلة.' %}
+  {% include "components/sadady/layout/simple-page.twig" %}
+{% endblock %}

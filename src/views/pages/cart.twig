@@ -1,0 +1,10 @@
+{% extends "layouts/landing.twig" %}
+
+{% block title %}السلة{% endblock %}
+
+{% block landing_content %}
+  {% set page_kicker = 'السلة' %}
+  {% set page_title = 'سلة الطلبات' %}
+  {% set page_description = 'هذه صفحة توافقية لسلة المتجر. رحلة سدادي الأساسية تبدأ من الصفحة الرئيسية ثم تنتقل إلى الطلب والتتبع.' %}
+  {% include "components/sadady/layout/simple-page.twig" %}
+{% endblock %}

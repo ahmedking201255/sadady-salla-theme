@@ -1,0 +1,10 @@
+{% extends "layouts/landing.twig" %}
+
+{% block title %}صفحة معلومات{% endblock %}
+
+{% block landing_content %}
+  {% set page_kicker = 'معلومات' %}
+  {% set page_title = page.title|default('صفحة معلومات') %}
+  {% set page_description = page.content|default('صفحة توافقية لعرض صفحات المتجر الثابتة داخل ثيم سدادي.') %}
+  {% include "components/sadady/layout/simple-page.twig" %}
+{% endblock %}

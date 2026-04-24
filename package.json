@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "sadady-salla-theme",
   "version": "1.0.40",
   "private": true,
@@ -9,10 +9,11 @@
     "salla:reset-state": "node ./scripts/reset-salla-cli-state.mjs",
     "lint": "npm run validate",
     "development": "node ./scripts/prepare-preview-assets.mjs",
-    "watch": "node ./scripts/prepare-preview-assets.mjs",
+    "watch": "node ./scripts/watch-preview-assets.mjs",
     "build": "npm run validate && npm run release:check",
     "prod": "npm run build",
     "preview": "npm run validate",
     "preview:local": "node ./scripts/render-local-preview.mjs"
   }
 }
+

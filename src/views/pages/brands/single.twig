@@ -1,0 +1,10 @@
+{% extends "layouts/landing.twig" %}
+
+{% block title %}علامة تجارية{% endblock %}
+
+{% block landing_content %}
+  {% set page_kicker = 'علامة تجارية' %}
+  {% set page_title = brand.name|default('علامة تجارية') %}
+  {% set page_description = brand.description|default('صفحة توافقية لعرض بيانات علامة تجارية داخل سلة.') %}
+  {% include "components/sadady/layout/simple-page.twig" %}
+{% endblock %}
