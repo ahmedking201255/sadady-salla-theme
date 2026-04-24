@@ -27,12 +27,22 @@ function toMoney(value) {
 
 function normalizeServiceCode(value) {
   const code = String(value || "").trim().toLowerCase();
-  if (code === "urgent_15m" || code === "urgent") return "urgent";
+  if (code === "urgent_15m" || code === "urgent") return "urgent_15m";
   return "normal";
 }
 
 function getServiceCodeFromLabel(value) {
-  return String(value || "").includes("15") ? "urgent" : "normal";
+  return String(value || "").includes("15") ? "urgent_15m" : "normal";
+}
+
+function getFallbackServiceLabel(serviceCode) {
+  return normalizeServiceCode(serviceCode) === "urgent_15m"
+    ? "خدمة مستعجلة خلال 15 دقيقة"
+    : "خدمة عادية";
+}
+
+function getCatalogServiceLabel(item) {
+  return item.label_ar || item.display_name_ar || item.name_ar || item.title || item.label || item.name || getFallbackServiceLabel(item.code);
 }
 
 function setServiceOptionState(inputName, serviceCode, enabled, label) {
@@ -42,6 +52,7 @@ function setServiceOptionState(inputName, serviceCode, enabled, label) {
   if (!option) return;
 
   option.dataset.serviceCode = normalizedCode;
+  option.value = normalizedCode;
   option.disabled = !enabled;
   const wrapper = option.closest(".speed-option");
   if (wrapper) {
@@ -78,7 +89,7 @@ async function hydrateCatalogHints() {
 
     if (Array.isArray(serviceTypes)) {
       serviceTypes.forEach((item) => {
-        const label = item.label_ar || item.label || item.name || item.code;
+        const label = getCatalogServiceLabel(item);
         const enabled = item.enabled !== false;
         setServiceOptionState("speed", item.code, enabled, label);
         setServiceOptionState("otherSpeedChoice", item.code, enabled, label);
@@ -137,17 +148,15 @@ function setFeedback(elementId, type, message) {
 }
 
 function getServiceLabel(serviceType) {
-  return serviceType === "urgent" || serviceType === "FAST" || serviceType === "URGENT" || serviceType === "خلال 15 دقيقة"
-    ? "خلال 15 دقيقة"
-    : "خلال ساعات العمل";
+  return getFallbackServiceLabel(serviceType);
 }
 
 function getSelectedServiceType(flowType) {
   const selector = flowType === "external"
     ? 'input[name="otherSpeedChoice"]:checked'
     : 'input[name="speed"]:checked';
-  const value = document.querySelector(selector)?.value || "خلال ساعات العمل";
-  return value === "خلال 15 دقيقة" ? "urgent" : "normal";
+  const option = document.querySelector(selector);
+  return normalizeServiceCode(option?.dataset.serviceCode || option?.value || "normal");
 }
 
 async function buildSadadPayload() {
@@ -232,11 +241,12 @@ async function startQuote(flowType) {
       return;
     }
 
-    if (!getSession()) {
-      setFeedback(feedbackId, "error", "يرجى تسجيل الدخول من حساب سلة أولًا لإكمال الطلب.");
-      return;
+    const submitButton = flowType === "sadad" ? sadadSubmitBtn : otherSubmitBtn;
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.dataset.originalText = submitButton.dataset.originalText || submitButton.textContent;
+      submitButton.textContent = "جاري حساب الرسوم...";
     }
-
     const quote = await calculateQuote(buildQuoteRequestPayload(payload));
     const session = getSession();
     const sessionSummary = getSessionSummary();
@@ -253,19 +263,24 @@ async function startQuote(flowType) {
     summaryTotal.textContent = toMoney(quote.breakdown.total_amount);
     if (summaryNextStep) {
       summaryNextStep.textContent = session?.session_token
-        ? "تم حفظ ملخصك داخل حساب سلة، والضغط على إتمام الطلب سينتقل بك إلى مسار الإكمال/التحويل النهائي."
-        : "احفظ ملخصك عبر تسجيل الدخول من حساب سلة ثم أكمل الإرسال.";
+        ? "تم حساب الرسوم. اضغط إتمام الطلب لإنشاء الطلب ومتابعة الإكمال."
+        : "تم حساب الرسوم بدون تسجيل دخول. عند الضغط على إتمام الطلب سيُطلب منك تسجيل الدخول إلى حسابك في سلة.";
     }
     if (toCompleteBtn) {
-      toCompleteBtn.textContent = session?.session_token
-        ? "إتمام الطلب والانتقال إلى سلة"
-        : "سجّل الدخول من سلة أولًا";
+      toCompleteBtn.textContent = "إتمام الطلب";
+      toCompleteBtn.hidden = false;
     }
     setCurrentJourney(journey);
     closeRequestModalSurface();
     requestFlowModal.hidden = false;
   } catch (error) {
     setFeedback(feedbackId, "error", error.message || "تعذر حساب العرض.");
+  } finally {
+    const submitButton = flowType === "sadad" ? sadadSubmitBtn : otherSubmitBtn;
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.textContent = submitButton.dataset.originalText || "احسب الرسوم";
+    }
   }
 }
 
