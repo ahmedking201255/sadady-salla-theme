@@ -1,6 +1,6 @@
 {
   "name": "sadady-salla-theme",
-  "version": "1.0.40",
+  "version": "1.0.41",
   "private": true,
   "description": "Private Sadady Salla theme with static home and API-backed customer journeys",
   "scripts": {

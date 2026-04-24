@@ -555,6 +555,19 @@ export async function getTracking(trackingNo) {
   });
 }
 
+export async function getPublicServiceTypes() {
+  return callPublicApi("/api/v1/public/service-types", {
+    method: "GET",
+  });
+}
+
+export async function getPublicBillers(invoiceType = "") {
+  const query = invoiceType ? `?invoice_type=${encodeURIComponent(invoiceType)}` : "";
+  return callPublicApi(`/api/v1/public/billers${query}`, {
+    method: "GET",
+  });
+}
+
 export async function getCustomerProfile() {
   const session = await requireCustomerSession();
   if (!session.mobile) {

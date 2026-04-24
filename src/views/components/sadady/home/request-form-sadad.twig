@@ -4,13 +4,15 @@
   <div class="form-grid">
     <div class="field">
       <label>اسم الشركة المفوترة</label>
-      <input id="sadadBillerName" placeholder="مثال: شركة الكهرباء">
+      <input id="sadadBillerName" list="sadadyBillerNames" placeholder="مثال: شركة الكهرباء">
+      <datalist id="sadadyBillerNames"></datalist>
     </div>
 
     <div class="field full">
       <label>بيانات السداد</label>
       <div class="form-grid">
-        <input id="sadadBillerCode" placeholder="رمز المفوتر">
+        <input id="sadadBillerCode" list="sadadyBillerCodes" placeholder="رمز المفوتر">
+        <datalist id="sadadyBillerCodes"></datalist>
         <input id="sadadBillNumber" placeholder="رقم (الفاتورة / الاشتراك / المفوترة)">
       </div>
     </div>

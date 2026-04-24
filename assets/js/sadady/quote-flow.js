@@ -1,4 +1,11 @@
-import { calculateQuote, getSession, getSessionSummary, setCurrentJourney } from "./api-client.js";
+import {
+  calculateQuote,
+  getPublicBillers,
+  getPublicServiceTypes,
+  getSession,
+  getSessionSummary,
+  setCurrentJourney,
+} from "./api-client.js";
 
 const requestFlowModal = document.getElementById("requestFlowModal");
 const requestModal = document.getElementById("requestModal");
@@ -16,6 +23,77 @@ const toCompleteBtn = document.getElementById("toCompleteBtn");
 
 function toMoney(value) {
   return `SAR ${Number(value || 0).toFixed(2)}`;
+}
+
+function normalizeServiceCode(value) {
+  const code = String(value || "").trim().toLowerCase();
+  if (code === "urgent_15m" || code === "urgent") return "urgent";
+  return "normal";
+}
+
+function getServiceCodeFromLabel(value) {
+  return String(value || "").includes("15") ? "urgent" : "normal";
+}
+
+function setServiceOptionState(inputName, serviceCode, enabled, label) {
+  const normalizedCode = normalizeServiceCode(serviceCode);
+  const options = Array.from(document.querySelectorAll(`input[name="${inputName}"]`));
+  const option = options.find((item) => normalizeServiceCode(item.dataset.serviceCode || getServiceCodeFromLabel(item.value)) === normalizedCode);
+  if (!option) return;
+
+  option.dataset.serviceCode = normalizedCode;
+  option.disabled = !enabled;
+  const wrapper = option.closest(".speed-option");
+  if (wrapper) {
+    wrapper.toggleAttribute("hidden", !enabled);
+    const title = wrapper.querySelector(".speed-option-title");
+    if (title && label) title.textContent = label;
+  }
+}
+
+function fillDatalist(id, values) {
+  const list = document.getElementById(id);
+  if (!list) return;
+  list.replaceChildren(...values.map((value) => {
+    const option = document.createElement("option");
+    option.value = value;
+    return option;
+  }));
+}
+
+function ensureEnabledServiceSelection(inputName) {
+  const options = Array.from(document.querySelectorAll(`input[name="${inputName}"]`));
+  const checked = options.find((item) => item.checked);
+  if (checked && !checked.disabled) return;
+  const firstEnabled = options.find((item) => !item.disabled);
+  if (firstEnabled) firstEnabled.checked = true;
+}
+
+async function hydrateCatalogHints() {
+  try {
+    const [serviceTypes, billers] = await Promise.all([
+      getPublicServiceTypes(),
+      getPublicBillers("sadad"),
+    ]);
+
+    if (Array.isArray(serviceTypes)) {
+      serviceTypes.forEach((item) => {
+        const label = item.label_ar || item.label || item.name || item.code;
+        const enabled = item.enabled !== false;
+        setServiceOptionState("speed", item.code, enabled, label);
+        setServiceOptionState("otherSpeedChoice", item.code, enabled, label);
+      });
+      ensureEnabledServiceSelection("speed");
+      ensureEnabledServiceSelection("otherSpeedChoice");
+    }
+
+    if (Array.isArray(billers)) {
+      fillDatalist("sadadyBillerNames", billers.map((item) => item.title || item.name_ar || item.name || "").filter(Boolean));
+      fillDatalist("sadadyBillerCodes", billers.map((item) => item.code || item.id || "").filter(Boolean));
+    }
+  } catch {
+    // Keep the static form usable if the public catalog API is unavailable.
+  }
 }
 
 function closeRequestModalSurface() {
@@ -199,4 +277,5 @@ requestFlowModal?.addEventListener("click", (event) => {
   if (event.target === requestFlowModal) requestFlowModal.hidden = true;
 });
 
+hydrateCatalogHints();
 window.__sadadyQuoteReady = true;
