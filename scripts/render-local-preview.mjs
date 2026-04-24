@@ -29,6 +29,9 @@ const translations = {
 
 const pages = [
   ["index.twig", "index.html"],
+  ["about-us.twig", "about-us.html"],
+  ["how-it-works.twig", "how-it-works.html"],
+  ["usage-policy.twig", "usage-policy.html"],
   ["tracking.twig", "tracking.html"],
   ["thank-you.twig", "thank-you.html"],
   ["customer/profile.twig", "customer/profile.html"],
@@ -38,6 +41,9 @@ const pages = [
 ];
 
 const routeAliases = [
+  ["about-us.html", "pages/about-us/index.html"],
+  ["how-it-works.html", "pages/how-it-works/index.html"],
+  ["usage-policy.html", "pages/usage-policy/index.html"],
   ["tracking.html", "tracking/index.html"],
   ["thank-you.html", "thank-you/index.html"],
   ["customer/profile.html", "customer/profile/index.html"],

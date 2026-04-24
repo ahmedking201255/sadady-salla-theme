@@ -1,0 +1,36 @@
+{% extends "layouts.landing" %}
+
+{% block title %}من نحن | سدادي{% endblock %}
+
+{% block landing_content %}
+  <main class="sadady-content-page">
+    <section class="content-hero">
+      <span class="content-kicker">منصة تشغيلية داخل سلة</span>
+      <h1>سدادي تربط طلبات سداد الفواتير والتقسيط برحلة عميل واضحة من البداية للنهاية</h1>
+      <p>سدادي ليست صفحة تعريفية فقط، بل طبقة خدمة تبدأ من واجهة العميل داخل سلة وتنتهي بطلب قابل للمتابعة داخل نظام تشغيل وإدارة داخلي.</p>
+    </section>
+
+    <section class="content-grid">
+      <article class="content-card">
+        <strong>ماذا تقدم سدادي؟</strong>
+        <p>تساعد العميل على تقديم طلب سداد فاتورة أو تقسيطها، مع توضيح البيانات المطلوبة، الرسوم، حالة الطلب، والمستندات النهائية بعد التنفيذ.</p>
+      </article>
+      <article class="content-card">
+        <strong>دور سلة</strong>
+        <p>سلة هي واجهة دخول العميل ومصدر الجلسة والهوية. العميل لا يحتاج نظام تسجيل منفصل داخل سدادي في مسار التشغيل الأساسي.</p>
+      </article>
+      <article class="content-card">
+        <strong>دور سدادي</strong>
+        <p>سدادي يستقبل الطلب، يحسب الرسوم، يحفظ البيانات، يمرر الطلب لفريق التشغيل، ثم يعرض التحديثات والمستندات للعميل.</p>
+      </article>
+      <article class="content-card">
+        <strong>دور التشغيل والإدارة</strong>
+        <p>فريق التشغيل يراجع وينفذ الطلبات، ولوحة الإدارة تضبط الخدمات والرسوم والصلاحيات والتقارير والتكاملات.</p>
+      </article>
+    </section>
+  </main>
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{{ 'js/sadady/live-home.js' | asset }}"></script>
+{% endblock %}

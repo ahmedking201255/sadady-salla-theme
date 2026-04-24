@@ -1,0 +1,62 @@
+{% extends "layouts.landing" %}
+
+{% block title %}كيف تعمل الخدمة | سدادي{% endblock %}
+
+{% block landing_content %}
+  <main class="sadady-content-page">
+    <section class="content-hero">
+      <span class="content-kicker">رحلة عميل مبسطة</span>
+      <h1>من إدخال بيانات الفاتورة إلى تنفيذ الطلب وإرسال المستندات</h1>
+      <p>الرحلة مصممة حتى يعرف العميل ما المطلوب منه، وما الذي يحدث بعد إرسال الطلب، وكيف يتابع حالته عبر حسابه في سلة.</p>
+    </section>
+
+    <section class="steps-panel">
+      <div class="step-row">
+        <span>01</span>
+        <div>
+          <strong>سجل الدخول عبر سلة</strong>
+          <p>يتم ربط الطلب بحسابك في سلة حتى تظهر لك الطلبات والمستندات المرتبطة بنفس الهوية.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <span>02</span>
+        <div>
+          <strong>اختر نوع الخدمة</strong>
+          <p>اختر سداد فاتورة، تقسيط، أو فاتورة خارج سداد حسب البيانات المتاحة لديك.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <span>03</span>
+        <div>
+          <strong>أدخل بيانات الطلب</strong>
+          <p>أضف رقم الفاتورة أو المرجع، المبلغ، المفوتر، بيانات التواصل، وأي مرفقات مطلوبة.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <span>04</span>
+        <div>
+          <strong>راجع الملخص والرسوم</strong>
+          <p>يعرض النظام ملخص الطلب والرسوم والضريبة قبل الإرسال حتى يكون القرار واضحًا.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <span>05</span>
+        <div>
+          <strong>يتولى فريق التشغيل التنفيذ</strong>
+          <p>يتم التحقق، التعيين، التنفيذ، المراجعة، ثم إرسال المستندات أو تحديث الحالة عند الحاجة لمعلومة إضافية.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <span>06</span>
+        <div>
+          <strong>تابع حالة الطلب</strong>
+          <p>يمكنك متابعة الطلب من صفحة الطلبات ومعرفة هل هو جديد، قيد المراجعة، قيد التنفيذ، مكتمل، أو يحتاج إجراء.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{{ 'js/sadady/live-home.js' | asset }}"></script>
+{% endblock %}

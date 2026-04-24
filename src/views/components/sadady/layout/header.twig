@@ -1,7 +1,7 @@
 <header class="header">
   <div class="header-inner">
     <div class="brand">
-      <a class="brand-link" href="/" data-theme-href="home_url" aria-label="{{ trans('sadady.header.home') }}">
+      <a class="brand-link" href="/" data-theme-href="home_url" aria-label="العودة إلى الرئيسية">
         <img class="brand-logo" data-theme-src="brand_logo_url" data-theme-alt="brand_name" src="{{ 'images/logo-default.svg' | asset }}" alt="Sadady" hidden>
         <div>
           <div class="logo-text" data-theme-text="brand_name">Sadady</div>
@@ -11,16 +11,16 @@
     </div>
     <nav class="nav" id="mainNav">
       <div class="nav-links">
-        <a href="#top">{{ trans('sadady.header.about') }}</a>
-        <a href="#" data-open-request-modal data-request-flow="sadad">{{ trans('sadady.header.how_it_works') }}</a>
-        <a href="#policy">{{ trans('sadady.header.contact') }}</a>
-        <a href="#policy">{{ trans('sadady.header.policy') }}</a>
+        <a href="/pages/about-us">من نحن</a>
+        <a href="/pages/how-it-works">كيف تعمل الخدمة</a>
+        <a href="/pages/usage-policy">سياسة الاستخدام</a>
+        <a href="#" data-open-request-modal data-request-flow="sadad">ابدأ الطلب</a>
       </div>
       <div class="nav-actions">
         <button class="lang-btn" type="button">EN</button>
-        <button id="goToCustomerBtn" class="btn btn-login" type="button">{{ trans('sadady.header.login') }}</button>
+        <button id="goToCustomerBtn" class="btn btn-login" type="button">تسجيل الدخول</button>
       </div>
-      <div class="login-hint" id="loginHint">{{ trans('sadady.header.login_hint') }}</div>
+      <div class="login-hint" id="loginHint">الدخول يتم عبر حساب سلة مباشرة.</div>
     </nav>
   </div>
 </header>
