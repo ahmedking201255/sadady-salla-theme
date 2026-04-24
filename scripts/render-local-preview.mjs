@@ -87,6 +87,36 @@ function copyDirectory(sourceDir, targetDir) {
   }
 }
 
+function writeSallaRootAssets() {
+  writeFileSync(
+    path.join(publicRoot, "app.css"),
+    [
+      '@import url("./css/sadady-home.css");',
+      '@import url("./css/sadady-journey.css");',
+      '@import url("./css/sadady-tracking.css");',
+      '@import url("./css/sadady-customer.css");',
+      "",
+    ].join("\n"),
+    "utf8",
+  );
+
+  writeFileSync(
+    path.join(publicRoot, "app.js"),
+    [
+      'import "./js/sadady/theme-api.js";',
+      'import "./js/sadady/auth.js";',
+      'import "./js/sadady/session-strip.js";',
+      'import "./js/sadady/live-home.js";',
+      'import "./js/sadady/quote-flow.js";',
+      'import "./js/sadady/checkout-flow.js";',
+      "",
+    ].join("\n"),
+    "utf8",
+  );
+
+  writeFileSync(path.join(publicRoot, "product-card.js"), "export {};\n", "utf8");
+}
+
 async function collectBlocks(template, blocks = {}) {
   const extendMatch = template.match(/{%\s*extends\s+"([^"]+)"\s*%}/);
   const blockRegex = /{%\s*block\s+([a-zA-Z0-9_]+)\s*%}([\s\S]*?){%\s*endblock\s*%}/g;
@@ -212,6 +242,8 @@ async function main() {
       copyDirectory(source, path.join(publicRoot, dir));
     }
   }
+
+  writeSallaRootAssets();
 
   for (const [source, target] of pages) {
     await renderPage(source, target);
