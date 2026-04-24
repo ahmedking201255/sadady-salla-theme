@@ -198,3 +198,5 @@ finishFlowBtn?.addEventListener("click", () => { requestFlowModal.hidden = true;
 requestFlowModal?.addEventListener("click", (event) => {
   if (event.target === requestFlowModal) requestFlowModal.hidden = true;
 });
+
+window.__sadadyQuoteReady = true;

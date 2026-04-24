@@ -46,3 +46,4 @@ window.addEventListener("sadady:auth-success", syncCustomerButton);
 window.addEventListener("sadady:auth-change", syncCustomerButton);
 document.addEventListener("DOMContentLoaded", syncCustomerButton);
 syncCustomerButton();
+window.__sadadyAuthReady = true;

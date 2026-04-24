@@ -1,8 +1,28 @@
 const DEFAULT_API_BASE = "https://api.sadady.com";
 const META_API_BASE = readMetaContent("sadady-api-base");
 const META_SUPPORT_EMAIL = readMetaContent("sadady-support-email");
-const API_BASE = window.SADADY_API_BASE || META_API_BASE || "";
+const API_BASE = normalizeApiBase(window.SADADY_API_BASE || META_API_BASE || "");
 const THEME_ENDPOINT = `${API_BASE || DEFAULT_API_BASE}/api/v1/public/theme-config`;
+const PAGES_ENDPOINT = `${API_BASE || DEFAULT_API_BASE}/api/v1/public/theme-pages`;
+const sectionTypeLabels = {
+  benefits: "المزايا",
+  journey: "رحلة العميل",
+  trust: "الثقة والاعتمادية",
+  support: "الدعم",
+  metrics: "مؤشرات الثقة",
+  contact: "قنوات التواصل",
+  services: "الخدمات",
+  steps: "خطوات العمل",
+  faq: "الأسئلة الشائعة",
+  content: "محتوى",
+};
+const cmsMetaLabels = {
+  SLA: "اتفاقية الخدمة",
+  Tracking: "تتبع الطلب",
+  WhatsApp: "واتساب",
+  Email: "البريد الإلكتروني",
+  Documents: "المستندات",
+};
 
 const defaults = {
   brand_name: "Sadady",
@@ -25,6 +45,24 @@ const defaults = {
 
 function readMetaContent(name) {
   return document.querySelector(`meta[name="${name}"]`)?.getAttribute("content")?.trim() || "";
+}
+
+function normalizeApiBase(value) {
+  const apiBase = String(value || "").trim().replace(/\/$/, "");
+  if (!apiBase || !window.SADADY_LOCAL_THEME_PREVIEW) return apiBase;
+
+  try {
+    const url = new URL(apiBase);
+    const isLoopbackApi = ["127.0.0.1", "localhost"].includes(url.hostname);
+    const isLoopbackPage = ["127.0.0.1", "localhost"].includes(window.location.hostname);
+    if (isLoopbackApi && isLoopbackPage && url.port === window.location.port) {
+      return window.location.origin;
+    }
+  } catch {
+    return apiBase;
+  }
+
+  return apiBase;
 }
 
 function setText(key, value) {
@@ -96,6 +134,96 @@ async function loadThemeConfig() {
   }
 }
 
+async function loadThemePages() {
+  try {
+    const response = await fetch(PAGES_ENDPOINT, { headers: { Accept: "application/json" } });
+    if (!response.ok) throw new Error("Theme pages unavailable");
+    const payload = await response.json();
+    return { source: "remote", data: Array.isArray(payload?.data) ? payload.data : [] };
+  } catch {
+    return { source: "defaults", data: [] };
+  }
+}
+
+function createCmsSection(section) {
+  const article = document.createElement("article");
+  article.className = "cms-section-card";
+
+  const header = document.createElement("div");
+  header.className = "cms-section-head";
+
+  const titleWrap = document.createElement("div");
+  const eyebrow = document.createElement("span");
+  eyebrow.className = "cms-section-kicker";
+  eyebrow.textContent = sectionTypeLabels[section.type] || section.title || "قسم";
+  const title = document.createElement("h2");
+  title.textContent = section.title || "قسم";
+  titleWrap.append(eyebrow, title);
+
+  const subtitle = document.createElement("p");
+  subtitle.textContent = section.subtitle || "";
+
+  header.append(titleWrap, subtitle);
+  article.append(header);
+
+  const items = Array.isArray(section.items) ? section.items.filter(Boolean) : [];
+  if (items.length) {
+    const grid = document.createElement("div");
+    grid.className = "cms-section-grid";
+    items.forEach((item) => {
+      const card = document.createElement("div");
+      card.className = "cms-section-item";
+      const itemTitle = document.createElement("strong");
+      itemTitle.textContent = item.title || "عنصر";
+      const itemDescription = document.createElement("p");
+      itemDescription.textContent = item.description || "";
+      card.append(itemTitle, itemDescription);
+      if (item.meta) {
+        const meta = document.createElement("span");
+        meta.textContent = cmsMetaLabels[item.meta] || item.meta;
+        card.append(meta);
+      }
+      grid.appendChild(card);
+    });
+    article.appendChild(grid);
+  }
+
+  return article;
+}
+
+function filterCmsSections(sections) {
+  const seen = new Set();
+  return (sections || []).filter((section) => {
+    const id = String(section?.id || "").toLowerCase();
+    const type = String(section?.type || "").toLowerCase();
+    if (id === "hero" || id.startsWith("hero-") || type === "hero") return false;
+
+    const title = String(section?.title || "").trim().toLowerCase();
+    const key = `${type}:${title || id}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function renderCmsHomeSections(pages) {
+  const home = pages.find((page) => page.slug === "home" || page.path === "/");
+  const sections = filterCmsSections(home?.sections);
+  if (!sections.length) return;
+
+  const services = document.querySelector(".services");
+  const mount = document.createElement("section");
+  mount.className = "cms-sections";
+  mount.dataset.themeCmsSections = "home";
+  sections.forEach((section) => mount.appendChild(createCmsSection(section)));
+
+  if (services?.parentNode) {
+    services.insertAdjacentElement("afterend", mount);
+    return;
+  }
+  document.querySelector(".container")?.appendChild(mount);
+}
+
 const themeState = await loadThemeConfig();
 const merged = { ...defaults, ...themeState.data };
 Object.entries(merged).forEach(([key, value]) => {
@@ -111,7 +239,7 @@ setCssVar("--success", merged.success_color);
 setCssVar("--surface-start", merged.surface_start);
 setCssVar("--surface-mid", merged.surface_mid);
 setCssVar("--surface-end", merged.surface_end);
-window.SADADY_API_BASE = window.SADADY_API_BASE || merged.api_base_url || DEFAULT_API_BASE;
+window.SADADY_API_BASE = API_BASE || merged.api_base_url || DEFAULT_API_BASE;
 window.SADADY_THEME_STATE = {
   source: themeState.source,
   loaded_at: new Date().toISOString(),
@@ -120,3 +248,8 @@ window.SADADY_THEME_STATE = {
 document.documentElement.dataset.sadadyThemeSource = themeState.source;
 document.documentElement.dataset.sadadyThemeReady = "true";
 window.sadadyThemeConfig = merged;
+
+const pagesState = await loadThemePages();
+renderCmsHomeSections(pagesState.data);
+window.SADADY_THEME_STATE.pages_source = pagesState.source;
+window.SADADY_THEME_STATE.pages_count = pagesState.data.length;

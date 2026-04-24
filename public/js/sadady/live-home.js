@@ -123,6 +123,7 @@ function initHome() {
   syncSessionWidget();
   bindOpenRequestModal();
   bindModalControls();
+  window.__sadadyHomeReady = true;
 }
 
 window.addEventListener("sadady:auth-success", () => syncSessionWidget());

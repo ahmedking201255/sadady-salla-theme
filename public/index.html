@@ -3295,6 +3295,192 @@ body.request-modal-open {
   <script type="module" src="/theme-preview/js/sadady/quote-flow.js"></script>
   <script type="module" src="/theme-preview/js/sadady/checkout-flow.js"></script>
 
+  <script id="sadady-inline-interactions">
+(function () {
+  if (window.__sadadyInlineInteractionsInstalled) return;
+  window.__sadadyInlineInteractionsInstalled = true;
+
+  function $(selector, root) {
+    return (root || document).querySelector(selector);
+  }
+
+  function $$(selector, root) {
+    return Array.prototype.slice.call((root || document).querySelectorAll(selector));
+  }
+
+  function money(value) {
+    return "SAR " + Number(value || 0).toFixed(2);
+  }
+
+  function numericValue(value) {
+    var normalized = String(value || "").replace(/[^\d.]/g, "");
+    return Number(normalized || 0);
+  }
+
+  function setFlow(flow) {
+    $$("[data-request-modal-tab]").forEach(function (tab) {
+      var active = tab.getAttribute("data-request-modal-tab") === flow;
+      tab.classList.toggle("is-active", active);
+      tab.setAttribute("aria-selected", active ? "true" : "false");
+    });
+
+    $$("[data-request-panel]").forEach(function (panel) {
+      var active = panel.getAttribute("data-request-panel") === flow;
+      panel.classList.toggle("is-active", active);
+      panel.hidden = !active;
+    });
+  }
+
+  function setSpeed(flow, speed) {
+    if (!speed) return;
+    var name = flow === "external" ? "otherSpeedChoice" : "speed";
+    var expected = speed === "urgent" ? "خلال 15 دقيقة" : "خلال ساعات العمل";
+    var input = $('input[name="' + name + '"][value="' + expected + '"]');
+    if (input) input.checked = true;
+  }
+
+  function openRequestModal(flow, speed) {
+    var modal = $("#requestModal");
+    if (!modal) return;
+    setFlow(flow || "sadad");
+    setSpeed(flow || "sadad", speed || "");
+    modal.hidden = false;
+    document.body.classList.add("request-modal-open");
+    window.requestAnimationFrame(function () {
+      var firstInput = $('[data-request-panel="' + (flow || "sadad") + '"] input');
+      if (firstInput && firstInput.focus) firstInput.focus({ preventScroll: true });
+    });
+  }
+
+  function closeRequestModal() {
+    var modal = $("#requestModal");
+    if (!modal) return;
+    modal.hidden = true;
+    document.body.classList.remove("request-modal-open");
+  }
+
+  function closeSummary() {
+    var modal = $("#requestFlowModal");
+    if (modal) modal.hidden = true;
+  }
+
+  function showFeedback(id, message) {
+    var node = $("#" + id);
+    if (!node) return;
+    node.hidden = !message;
+    node.className = "form-feedback is-error";
+    node.textContent = message || "";
+  }
+
+  function selectedSpeed(flow) {
+    var name = flow === "external" ? "otherSpeedChoice" : "speed";
+    var checked = $('input[name="' + name + '"]:checked');
+    return checked ? checked.value : "خلال ساعات العمل";
+  }
+
+  function showSummary(flow) {
+    var feedbackId = flow === "external" ? "otherFeedback" : "sadadFeedback";
+    var amountInput = flow === "external" ? $("#otherInvoiceAmount") : $("#sadadInvoiceAmount");
+    var amount = numericValue(amountInput && amountInput.value);
+
+    if (!amount) {
+      showFeedback(feedbackId, "أدخل مبلغ الفاتورة أولا.");
+      return;
+    }
+
+    showFeedback(feedbackId, "");
+    var fee = Math.max(15, amount * 0.025);
+    var vat = fee * 0.15;
+    var total = amount + fee + vat;
+
+    var summarySpeed = $("#summarySpeed");
+    var summaryInvoice = $("#summaryInvoice");
+    var summaryFee = $("#summaryFee");
+    var summaryVat = $("#summaryVat");
+    var summaryTotal = $("#summaryTotal");
+    var summaryNextStep = $("#summaryNextStep");
+    var summaryModal = $("#requestFlowModal");
+
+    if (summarySpeed) summarySpeed.textContent = selectedSpeed(flow);
+    if (summaryInvoice) summaryInvoice.textContent = money(amount);
+    if (summaryFee) summaryFee.textContent = money(fee);
+    if (summaryVat) summaryVat.textContent = money(vat);
+    if (summaryTotal) summaryTotal.textContent = money(total);
+    if (summaryNextStep) summaryNextStep.textContent = "تم تجهيز ملخص الطلب داخل المعاينة. في الربط الحي يتم إرسال الطلب إلى نظام سدادي.";
+
+    closeRequestModal();
+    if (summaryModal) summaryModal.hidden = false;
+  }
+
+  function goToCustomerArea() {
+    window.location.href = "/customer/orders/";
+  }
+
+  function completePreviewOrder() {
+    window.location.href = "/thank-you";
+  }
+
+  document.addEventListener("click", function (event) {
+    var openBtn = event.target.closest("[data-open-request-modal]");
+    if (openBtn && !window.__sadadyHomeReady) {
+      event.preventDefault();
+      openRequestModal(openBtn.getAttribute("data-request-flow") || "sadad", openBtn.getAttribute("data-request-speed") || "");
+      return;
+    }
+
+    var closeBtn = event.target.closest("[data-close-request-modal], #closeRequestModalBtn");
+    if (closeBtn && !window.__sadadyHomeReady) {
+      event.preventDefault();
+      closeRequestModal();
+      return;
+    }
+
+    var tab = event.target.closest("[data-request-modal-tab]");
+    if (tab && !window.__sadadyHomeReady) {
+      event.preventDefault();
+      setFlow(tab.getAttribute("data-request-modal-tab") || "sadad");
+      return;
+    }
+
+    if (event.target.closest("#sadadSubmitBtn") && !window.__sadadyQuoteReady) {
+      event.preventDefault();
+      showSummary("sadad");
+      return;
+    }
+
+    if (event.target.closest("#otherSubmitBtn") && !window.__sadadyQuoteReady) {
+      event.preventDefault();
+      showSummary("external");
+      return;
+    }
+
+    if (event.target.closest("#backFlowBtn, #finishFlowBtn") && !window.__sadadyQuoteReady) {
+      event.preventDefault();
+      closeSummary();
+      return;
+    }
+
+    if (event.target.closest("#toCompleteBtn") && !window.__sadadyCheckoutReady) {
+      event.preventDefault();
+      completePreviewOrder();
+      return;
+    }
+
+    if (event.target.closest("#goToCustomerBtn") && !window.__sadadyAuthReady) {
+      event.preventDefault();
+      goToCustomerArea();
+    }
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+      closeRequestModal();
+      closeSummary();
+    }
+  });
+})();
+</script>
+
   
 </body>
 </html>

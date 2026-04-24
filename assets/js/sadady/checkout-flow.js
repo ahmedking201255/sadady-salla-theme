@@ -29,3 +29,5 @@ toCompleteBtn?.addEventListener("click", async () => {
     toCompleteBtn.disabled = false;
   }
 });
+
+window.__sadadyCheckoutReady = true;
