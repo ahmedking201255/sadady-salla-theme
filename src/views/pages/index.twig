@@ -1,11 +1,11 @@
-{% extends "layouts/landing.twig" %}
+{% extends "layouts.landing" %}
 
 {% block title %}سدادي{% endblock %}
 
 {% block landing_content %}
-  {% include "components/sadady/home/hero-banner.twig" %}
-  {% include "components/sadady/home/service-modes.twig" %}
-  {% include "components/sadady/home/request-modal.twig" %}
+  {% include "components.sadady.home.hero-banner" %}
+  {% include "components.sadady.home.service-modes" %}
+  {% include "components.sadady.home.request-modal" %}
 {% endblock %}
 
 {% block scripts %}

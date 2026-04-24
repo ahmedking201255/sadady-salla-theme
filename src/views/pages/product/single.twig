@@ -1,4 +1,4 @@
-{% extends "layouts/landing.twig" %}
+{% extends "layouts.landing" %}
 
 {% block title %}تفاصيل المنتج{% endblock %}
 
@@ -6,5 +6,5 @@
   {% set page_kicker = 'تفاصيل المنتج' %}
   {% set page_title = product.name|default('تفاصيل المنتج') %}
   {% set page_description = product.description|default('هذه صفحة توافقية لتفاصيل المنتج داخل سلة.') %}
-  {% include "components/sadady/layout/simple-page.twig" %}
+  {% include "components.sadady.layout.simple-page" %}
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends "layouts/landing.twig" %}
+{% extends "layouts.landing" %}
 
 {% block title %}الملف الشخصي | سدادي{% endblock %}
 
@@ -10,7 +10,7 @@
   <main class="customer-page">
     {% hook 'customer:profile.form.start' %}
     {% hook 'customer:profile.form.fields.start' %}
-    {% include "components/sadady/customer/customer-profile-summary.twig" %}
+    {% include "components.sadady.customer.customer-profile-summary" %}
     {% hook 'customer:profile.form.fields.end' %}
     {% hook 'customer:profile.form.end' %}
   </main>

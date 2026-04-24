@@ -1,4 +1,4 @@
-{% extends "layouts/landing.twig" %}
+{% extends "layouts.landing" %}
 
 {% block title %}المدونة{% endblock %}
 
@@ -6,5 +6,5 @@
   {% set page_kicker = 'المدونة' %}
   {% set page_title = 'مقالات سدادي' %}
   {% set page_description = 'صفحة توافقية لقائمة المقالات داخل ثيم سدادي.' %}
-  {% include "components/sadady/layout/simple-page.twig" %}
+  {% include "components.sadady.layout.simple-page" %}
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends "layouts/landing.twig" %}
+{% extends "layouts.landing" %}
 
 {% block title %}طلباتي | سدادي{% endblock %}
 
@@ -9,7 +9,7 @@
 {% block landing_content %}
   <main class="customer-page">
     {% hook 'customer:orders.index.items.start' %}
-    {% include "components/sadady/customer/customer-orders-list.twig" %}
+    {% include "components.sadady.customer.customer-orders-list" %}
     {% hook 'customer:orders.index.items.end' %}
   </main>
 {% endblock %}

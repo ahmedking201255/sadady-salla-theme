@@ -1,4 +1,4 @@
-{% extends "layouts/landing.twig" %}
+{% extends "layouts.landing" %}
 
 {% block title %}الإشعارات | سدادي{% endblock %}
 
@@ -9,7 +9,7 @@
 {% block landing_content %}
   <main class="customer-page">
     {% hook 'customer:notifications.items.start' %}
-    {% include "components/sadady/customer/customer-notifications-list.twig" %}
+    {% include "components.sadady.customer.customer-notifications-list" %}
     {% hook 'customer:notifications.items.end' %}
   </main>
 {% endblock %}

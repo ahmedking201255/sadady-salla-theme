@@ -1,11 +1,11 @@
-{% extends "layouts/master.twig" %}
+{% extends "layouts.master" %}
 
 {% block content %}
   <div class="container">
-    {% include "components/sadady/layout/header.twig" %}
-    {% include "components/sadady/layout/session-strip.twig" %}
+    {% include "components.sadady.layout.header" %}
+    {% include "components.sadady.layout.session-strip" %}
     {% block landing_content %}{% endblock %}
-    {% include "components/sadady/layout/footer.twig" %}
+    {% include "components.sadady.layout.footer" %}
   </div>
-  {% include "components/sadady/journey/summary-modal.twig" %}
+  {% include "components.sadady.journey.summary-modal" %}
 {% endblock %}

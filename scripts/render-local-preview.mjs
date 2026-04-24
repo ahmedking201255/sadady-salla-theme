@@ -45,8 +45,16 @@ const routeAliases = [
   ["customer/orders/single.html", "customer/orders/single/index.html"],
 ];
 
+function normalizeViewPath(viewPath) {
+  if (viewPath.includes("/") || viewPath.endsWith(".twig")) {
+    return viewPath;
+  }
+
+  return `${viewPath.replaceAll(".", "/")}.twig`;
+}
+
 function readView(viewPath) {
-  const fullPath = path.join(viewsRoot, viewPath);
+  const fullPath = path.join(viewsRoot, normalizeViewPath(viewPath));
   if (!existsSync(fullPath)) {
     throw new Error(`Missing Twig view: ${viewPath}`);
   }
@@ -155,22 +163,22 @@ function normalizeTwig(template) {
 async function renderPage(source, target) {
   const pageTemplate = await loadView(`pages/${source}`);
   const pageBlocks = extractOwnBlocks(pageTemplate);
-  const usesLandingLayout = /{%\s*extends\s+"layouts\/landing\.twig"\s*%}/.test(pageTemplate);
+  const usesLandingLayout = /{%\s*extends\s+"(?:layouts\/landing\.twig|layouts\.landing)"\s*%}/.test(pageTemplate);
   const { template, blocks } = usesLandingLayout
     ? {
-        template: await loadView("layouts/master.twig"),
+        template: await loadView("layouts.master"),
         blocks: {
           title: pageBlocks.title,
           styles: pageBlocks.styles,
           scripts: pageBlocks.scripts,
           content: `
   <div class="container">
-    {% include "components/sadady/layout/header.twig" %}
-    {% include "components/sadady/layout/session-strip.twig" %}
+    {% include "components.sadady.layout.header" %}
+    {% include "components.sadady.layout.session-strip" %}
     ${pageBlocks.landing_content ?? ""}
-    {% include "components/sadady/layout/footer.twig" %}
+    {% include "components.sadady.layout.footer" %}
   </div>
-  {% include "components/sadady/journey/summary-modal.twig" %}
+  {% include "components.sadady.journey.summary-modal" %}
 `,
         },
       }
