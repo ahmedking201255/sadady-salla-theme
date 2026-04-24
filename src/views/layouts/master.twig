@@ -15,6 +15,9 @@
   <link rel="stylesheet" href="{{ 'app.css' | asset }}">
   <link rel="stylesheet" href="{{ 'css/sadady-home.css' | asset }}">
   <link rel="stylesheet" href="{{ 'css/sadady-journey.css' | asset }}">
+  <style id="sadady-inline-theme-css">
+    {% include "components.sadady.styles.bundle" %}
+  </style>
   <script type="module" src="{{ 'app.js' | asset }}"></script>
   <script type="module" src="{{ 'js/sadady/theme-api.js' | asset }}"></script>
   <script type="module" src="{{ 'js/sadady/auth.js' | asset }}"></script>
