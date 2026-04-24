@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 const themeRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 function readJson(relPath) {
-  return JSON.parse(readFileSync(resolve(themeRoot, relPath), "utf8"));
+  return JSON.parse(readFileSync(resolve(themeRoot, relPath), "utf8").replace(/^\uFEFF/, ""));
 }
 
 function run(command, { allowFailure = false } = {}) {
