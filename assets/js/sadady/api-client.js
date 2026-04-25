@@ -367,6 +367,39 @@ export function getSession() {
   return mergeSessionState();
 }
 
+export function getStoredSadadySession() {
+  return readStoredCustomerSession();
+}
+
+export function isSadadySessionValid(session) {
+  return Boolean(session?.session_token && (session.customer_id || session.mobile));
+}
+
+export function setStoredSadadySession(value) {
+  return setSession(value);
+}
+
+export async function ensureSadadySession() {
+  const stored = readStoredCustomerSession();
+  if (isSadadySessionValid(stored)) {
+    return stored;
+  }
+
+  const identity = getSallaIdentity();
+  if (!identity?.salla_session_token) {
+    return null;
+  }
+
+  try {
+    return await exchangeCustomerSession();
+  } catch (error) {
+    if (error.status === 401 || error.status === 403) {
+      clearSession();
+    }
+    return null;
+  }
+}
+
 export function hasSallaSession() {
   const identity = getSallaIdentity();
   return Boolean(identity?.customer_id || identity?.mobile || identity?.salla_session_token);

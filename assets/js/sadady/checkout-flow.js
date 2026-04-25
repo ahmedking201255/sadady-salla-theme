@@ -1,4 +1,4 @@
-import { checkoutOrder, getCurrentJourney, getSession, precreateOrder, clearCurrentJourney } from "./api-client.js";
+import { checkoutOrder, ensureSadadySession, getCurrentJourney, getSession, precreateOrder, clearCurrentJourney } from "./api-client.js";
 
 const toCompleteBtn = document.getElementById("toCompleteBtn");
 const summaryNote = document.getElementById("summaryNote");
@@ -18,15 +18,23 @@ toCompleteBtn?.addEventListener("click", async () => {
     return;
   }
 
-  const session = getSession();
+  toCompleteBtn.disabled = true;
+  toCompleteBtn.dataset.originalText = toCompleteBtn.dataset.originalText || toCompleteBtn.textContent;
+  toCompleteBtn.textContent = "جاري تأكيد جلسة سلة...";
+
+  const sessionBeforeExchange = getSession();
+  const session = await ensureSadadySession();
   if (!session?.session_token) {
-    setCheckoutMessage("لإكمال الطلب، يرجى تسجيل الدخول إلى حسابك في سلة.");
+    const message = sessionBeforeExchange
+      ? "تعذر تأكيد جلسة سلة. أعد تحميل الصفحة أو سجّل الدخول مرة أخرى."
+      : "لإكمال الطلب، يرجى تسجيل الدخول إلى حسابك في سلة.";
+    setCheckoutMessage(message);
     if (summaryLoginLink) summaryLoginLink.hidden = false;
+    toCompleteBtn.disabled = false;
+    toCompleteBtn.textContent = toCompleteBtn.dataset.originalText || "إتمام الطلب";
     return;
   }
 
-  toCompleteBtn.disabled = true;
-  toCompleteBtn.dataset.originalText = toCompleteBtn.dataset.originalText || toCompleteBtn.textContent;
   toCompleteBtn.textContent = "جاري إتمام الطلب...";
   try {
     const precreated = await precreateOrder({
