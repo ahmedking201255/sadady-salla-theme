@@ -2,6 +2,7 @@ import {
   calculateQuote,
   getPublicBillers,
   getPublicServiceTypes,
+  hasSallaSession,
   getSession,
   getSessionSummary,
   setCurrentJourney,
@@ -264,7 +265,9 @@ async function startQuote(flowType) {
     if (summaryNextStep) {
       summaryNextStep.textContent = session?.session_token
         ? "تم حساب الرسوم. اضغط إتمام الطلب لإنشاء الطلب ومتابعة الإكمال."
-        : "تم حساب الرسوم بدون تسجيل دخول. عند الضغط على إتمام الطلب سيُطلب منك تسجيل الدخول إلى حسابك في سلة.";
+        : hasSallaSession()
+          ? "تم حساب الرسوم. سيتم تأكيد جلسة سلة تلقائيًا عند الضغط على إتمام الطلب."
+          : "تم حساب الرسوم بدون تسجيل دخول. عند الضغط على إتمام الطلب سيُطلب منك تسجيل الدخول إلى حسابك في سلة.";
     }
     if (toCompleteBtn) {
       toCompleteBtn.textContent = "إتمام الطلب";
