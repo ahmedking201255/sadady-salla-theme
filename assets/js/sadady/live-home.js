@@ -46,11 +46,26 @@ function syncSessionWidget(root = document) {
   }
 }
 
+function getRequestedServiceCode(speed) {
+  const normalizedSpeed = String(speed || "").trim().toLowerCase();
+  return ["urgent", "urgent_15m", "fast"].includes(normalizedSpeed) ? "urgent_15m" : "normal";
+}
+
+function matchesRequestedSpeed(option, expectedCode) {
+  const serviceCode = String(option.dataset.serviceCode || option.value || "").trim().toLowerCase();
+  const label = String(option.value || option.closest(".speed-option")?.textContent || "").trim();
+  if (expectedCode === "urgent_15m") {
+    return serviceCode === "urgent_15m" || serviceCode === "urgent" || label.includes("15");
+  }
+  return serviceCode === "normal" || label.includes("ساعات العمل");
+}
+
 function setSelectedSpeed(flow, speed) {
   if (!speed) return;
   const inputName = flow === "external" ? "otherSpeedChoice" : "speed";
-  const expectedValue = speed === "urgent" ? "خلال 15 دقيقة" : "خلال ساعات العمل";
-  const input = document.querySelector(`input[name="${inputName}"][value="${expectedValue}"]`);
+  const expectedCode = getRequestedServiceCode(speed);
+  const options = Array.from(document.querySelectorAll(`input[name="${inputName}"]`));
+  const input = options.find((option) => matchesRequestedSpeed(option, expectedCode));
   if (input) {
     input.checked = true;
     input.dispatchEvent(new Event("change", { bubbles: true }));
@@ -78,6 +93,7 @@ function openRequestModal(flow = "sadad", speed = "") {
   requestModal.hidden = false;
   document.body.classList.add("request-modal-open");
   window.requestAnimationFrame(() => {
+    setSelectedSpeed(flow, speed);
     const firstInput = requestModal.querySelector(`[data-request-panel="${flow}"] input`);
     firstInput?.focus({ preventScroll: true });
   });

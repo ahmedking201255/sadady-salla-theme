@@ -4,24 +4,49 @@ const META_SUPPORT_EMAIL = readMetaContent("sadady-support-email");
 const API_BASE = normalizeApiBase(window.SADADY_API_BASE || META_API_BASE || "");
 const THEME_ENDPOINT = `${API_BASE || DEFAULT_API_BASE}/api/v1/public/theme-config`;
 const PAGES_ENDPOINT = `${API_BASE || DEFAULT_API_BASE}/api/v1/public/theme-pages`;
+
 const sectionTypeLabels = {
-  benefits: "المزايا",
-  journey: "رحلة العميل",
-  trust: "الثقة والاعتمادية",
-  support: "الدعم",
-  metrics: "مؤشرات الثقة",
-  contact: "قنوات التواصل",
-  services: "الخدمات",
-  steps: "خطوات العمل",
-  faq: "الأسئلة الشائعة",
-  content: "محتوى",
+  ar: {
+    benefits: "المزايا",
+    journey: "رحلة العميل",
+    trust: "الثقة والاعتمادية",
+    support: "الدعم",
+    metrics: "مؤشرات الثقة",
+    contact: "قنوات التواصل",
+    services: "الخدمات",
+    steps: "خطوات العمل",
+    faq: "الأسئلة الشائعة",
+    content: "محتوى",
+  },
+  en: {
+    benefits: "Benefits",
+    journey: "Customer journey",
+    trust: "Trust and compliance",
+    support: "Support",
+    metrics: "Trust metrics",
+    contact: "Contact channels",
+    services: "Services",
+    steps: "How it works",
+    faq: "FAQ",
+    content: "Content",
+  },
 };
+
 const cmsMetaLabels = {
-  SLA: "اتفاقية الخدمة",
-  Tracking: "تتبع الطلب",
-  WhatsApp: "واتساب",
-  Email: "البريد الإلكتروني",
-  Documents: "المستندات",
+  ar: {
+    SLA: "اتفاقية الخدمة",
+    Tracking: "تتبع الطلب",
+    WhatsApp: "واتساب",
+    Email: "البريد الإلكتروني",
+    Documents: "المستندات",
+  },
+  en: {
+    SLA: "Service level",
+    Tracking: "Order tracking",
+    WhatsApp: "WhatsApp",
+    Email: "Email",
+    Documents: "Documents",
+  },
 };
 
 const defaults = {
@@ -63,6 +88,28 @@ function normalizeApiBase(value) {
   }
 
   return apiBase;
+}
+
+function getCurrentLanguage() {
+  return localStorage.getItem("sadady.theme.language") === "en" ? "en" : "ar";
+}
+
+function getLocalizedValue(source, key, fallback = "") {
+  if (!source || typeof source !== "object") return fallback;
+  const language = getCurrentLanguage();
+  const suffix = language === "en" ? "en" : "ar";
+  const pascalSuffix = suffix === "en" ? "En" : "Ar";
+  const candidates = [
+    source[`${key}_${suffix}`],
+    source[`${key}${pascalSuffix}`],
+    source?.translations?.[language]?.[key],
+    source?.locales?.[language]?.[key],
+    source?.i18n?.[language]?.[key],
+    source[key],
+    fallback,
+  ];
+
+  return candidates.find((value) => value !== undefined && value !== null && String(value).trim() !== "") ?? fallback;
 }
 
 function setText(key, value) {
@@ -145,6 +192,16 @@ async function loadThemePages() {
   }
 }
 
+function getLocalizedSectionType(type, fallback) {
+  const language = getCurrentLanguage();
+  return sectionTypeLabels[language]?.[type] || fallback;
+}
+
+function getLocalizedCmsMeta(meta) {
+  const language = getCurrentLanguage();
+  return cmsMetaLabels[language]?.[meta] || meta;
+}
+
 function createCmsSection(section) {
   const article = document.createElement("article");
   article.className = "cms-section-card";
@@ -155,13 +212,14 @@ function createCmsSection(section) {
   const titleWrap = document.createElement("div");
   const eyebrow = document.createElement("span");
   eyebrow.className = "cms-section-kicker";
-  eyebrow.textContent = sectionTypeLabels[section.type] || section.title || "قسم";
+  const sectionTitle = getLocalizedValue(section, "title", "قسم");
+  eyebrow.textContent = getLocalizedSectionType(section.type, sectionTitle);
   const title = document.createElement("h2");
-  title.textContent = section.title || "قسم";
+  title.textContent = sectionTitle;
   titleWrap.append(eyebrow, title);
 
   const subtitle = document.createElement("p");
-  subtitle.textContent = section.subtitle || "";
+  subtitle.textContent = getLocalizedValue(section, "subtitle", "");
 
   header.append(titleWrap, subtitle);
   article.append(header);
@@ -174,13 +232,13 @@ function createCmsSection(section) {
       const card = document.createElement("div");
       card.className = "cms-section-item";
       const itemTitle = document.createElement("strong");
-      itemTitle.textContent = item.title || "عنصر";
+      itemTitle.textContent = getLocalizedValue(item, "title", "عنصر");
       const itemDescription = document.createElement("p");
-      itemDescription.textContent = item.description || "";
+      itemDescription.textContent = getLocalizedValue(item, "description", "");
       card.append(itemTitle, itemDescription);
       if (item.meta) {
         const meta = document.createElement("span");
-        meta.textContent = cmsMetaLabels[item.meta] || item.meta;
+        meta.textContent = getLocalizedCmsMeta(item.meta);
         card.append(meta);
       }
       grid.appendChild(card);
@@ -207,6 +265,7 @@ function filterCmsSections(sections) {
 }
 
 function renderCmsHomeSections(pages) {
+  document.querySelectorAll('[data-theme-cms-sections="home"]').forEach((node) => node.remove());
   const home = pages.find((page) => page.slug === "home" || page.path === "/");
   const sections = filterCmsSections(home?.sections);
   if (!sections.length) return;
@@ -224,14 +283,21 @@ function renderCmsHomeSections(pages) {
   document.querySelector(".container")?.appendChild(mount);
 }
 
+function applyThemeConfig(config) {
+  Object.entries(config).forEach(([key, value]) => {
+    const localizedValue = getLocalizedValue(config, key, value);
+    if (typeof localizedValue === "string") {
+      setText(key, localizedValue);
+    }
+  });
+}
+
 const themeState = await loadThemeConfig();
 const merged = { ...defaults, ...themeState.data };
-Object.entries(merged).forEach(([key, value]) => {
-  if (typeof value === "string") setText(key, value);
-});
+applyThemeConfig(merged);
 setImage("brand_logo_url", merged.brand_logo_url);
 setImage("favicon_url", merged.favicon_url);
-setAlt("brand_name", merged.brand_name);
+setAlt("brand_name", getLocalizedValue(merged, "brand_name", merged.brand_name));
 setLink("home_url", merged.home_url);
 setCssVar("--primary", merged.primary_color);
 setCssVar("--primary-2", merged.primary_color_alt);
@@ -253,3 +319,9 @@ const pagesState = await loadThemePages();
 renderCmsHomeSections(pagesState.data);
 window.SADADY_THEME_STATE.pages_source = pagesState.source;
 window.SADADY_THEME_STATE.pages_count = pagesState.data.length;
+
+window.addEventListener("sadady:language-change", () => {
+  applyThemeConfig(merged);
+  setAlt("brand_name", getLocalizedValue(merged, "brand_name", merged.brand_name));
+  renderCmsHomeSections(pagesState.data);
+});

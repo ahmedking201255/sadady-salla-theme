@@ -42,6 +42,40 @@
   padding: clamp(1.15rem, 3vw, 1.75rem);
 }
 
+@media (max-width: 720px) {
+  .flow-modal {
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    padding: max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom));
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .flow-box {
+    width: min(100%, 460px);
+    max-height: none;
+    min-height: auto;
+    margin: 0 auto;
+    overflow: visible;
+    border-radius: 26px;
+  }
+
+  .summary-list {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .summary-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 3;
+    margin-inline: -0.35rem;
+    padding: 0.75rem 0.35rem 0;
+    background: linear-gradient(180deg, rgba(244, 255, 251, 0), rgba(244, 255, 251, 0.98) 28%);
+    border-radius: 0 0 22px 22px;
+  }
+}
+
 .login-box::before,
 .flow-box::before {
   content: "";

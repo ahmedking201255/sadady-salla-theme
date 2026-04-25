@@ -11,12 +11,28 @@ function setCheckoutMessage(message, type = "error") {
   summaryNote.textContent = message;
 }
 
-function buildSameThemeSuccessUrl(order) {
-  const url = new URL(window.location.href);
-  url.searchParams.set("sadady_success", "1");
+function buildThemeSuccessUrl(order) {
+  const url = new URL("/thank-you", window.location.origin);
   url.searchParams.set("tracking_no", order.tracking_no || "");
   url.searchParams.set("public_order_id", order.public_order_id || "");
-  return `${url.pathname}${url.search}${url.hash || ""}`;
+  return `${url.pathname}${url.search}`;
+}
+
+function resolveCheckoutRedirect(checkout, order) {
+  const candidate = String(
+    checkout?.payment_url ||
+      checkout?.salla_payment_url ||
+      checkout?.salla_checkout_url ||
+      checkout?.checkout_payment_url ||
+      checkout?.checkout_url ||
+      "",
+  ).trim();
+
+  if (/^https?:\/\//i.test(candidate)) {
+    return candidate;
+  }
+
+  return buildThemeSuccessUrl(order);
 }
 
 toCompleteBtn?.addEventListener("click", async () => {
@@ -54,7 +70,7 @@ toCompleteBtn?.addEventListener("click", async () => {
       quote_snapshot: journey.quote.breakdown,
     });
     const checkout = await checkoutOrder(precreated.public_order_id, { channel: "theme_web" });
-    const successUrl = buildSameThemeSuccessUrl({
+    const successUrl = resolveCheckoutRedirect(checkout, {
       tracking_no: precreated.tracking_no || checkout.tracking_no || "",
       public_order_id: precreated.public_order_id || checkout.public_order_id || "",
     });

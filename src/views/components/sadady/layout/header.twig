@@ -9,6 +9,12 @@
         </div>
       </a>
     </div>
+    <button class="nav-toggle" type="button" aria-controls="mainNav" aria-expanded="false" data-nav-toggle>
+      <span></span>
+      <span></span>
+      <span></span>
+      <b>القائمة</b>
+    </button>
     <nav class="nav" id="mainNav">
       <div class="nav-links">
         <a href="#about-sadady">من نحن</a>
@@ -17,7 +23,10 @@
         <a href="#" data-open-request-modal data-request-flow="sadad">ابدأ الطلب</a>
       </div>
       <div class="nav-actions">
-        <button class="lang-btn" type="button">EN</button>
+        <button class="lang-btn" type="button" aria-label="التبديل إلى الإنجليزية">
+          <span class="lang-icon" aria-hidden="true">🌐</span>
+          <span class="lang-code">EN</span>
+        </button>
         <button id="goToCustomerBtn" class="btn btn-login" type="button">تسجيل الدخول</button>
       </div>
       <div class="login-hint" id="loginHint">الدخول يتم عبر حساب سلة مباشرة.</div>

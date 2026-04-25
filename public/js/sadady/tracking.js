@@ -4,6 +4,24 @@ const trackingSearchBtn = document.getElementById("trackingSearchBtn");
 const trackingQuery = document.getElementById("trackingQuery");
 const trackingResult = document.getElementById("trackingResult");
 
+const STATUS_LABELS = {
+  pending: "بانتظار التحصيل",
+  pending_payment_capture: "بانتظار الدفع في سلة",
+  paid: "تم الدفع",
+  collected: "تم التحصيل",
+  captured: "تم التحصيل",
+  failed: "فشل التحصيل",
+  canceled: "ملغي",
+  cancelled: "ملغي",
+  expired: "منتهي",
+  draft: "مسودة",
+  synced: "تمت المزامنة",
+  sync_pending: "بانتظار المزامنة",
+  skipped: "لم تتم المزامنة",
+  ignored: "تم التجاهل",
+  not_required: "غير مطلوبة",
+};
+
 function escapeHtml(value) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
@@ -86,6 +104,34 @@ function getOrderValue(order, keys, fallback = "-") {
   return fallback;
 }
 
+function translateStatus(value, fallback = "-") {
+  const text = String(value ?? "").trim();
+  if (!text || text === "-") return fallback;
+  const key = text.toLowerCase().replace(/\s+/g, "_").replaceAll("-", "_");
+  return STATUS_LABELS[key] || text;
+}
+
+function translateSyncStatus(value, fallback = "-") {
+  const text = String(value ?? "").trim();
+  if (!text || text === "-") return fallback;
+  const key = text.toLowerCase().replace(/\s+/g, "_").replaceAll("-", "_");
+  return {
+    pending: "بانتظار المزامنة",
+    synced: "تمت المزامنة",
+    failed: "فشلت المزامنة",
+    skipped: "لم تتم المزامنة",
+    ignored: "تم التجاهل",
+    not_required: "غير مطلوبة",
+    draft: "مسودة",
+  }[key] || STATUS_LABELS[key] || text;
+}
+
+function getSallaOrderNumber(order) {
+  const value = String(getOrderValue(order, ["salla.order_number", "salla.orderNumber", "salla_order_number", "sallaOrderNumber", "salla_order_id"], "")).trim();
+  if (!value || /^draft-/i.test(value)) return "-";
+  return value;
+}
+
 function getOrderAmount(order, keys) {
   const value = getOrderValue(order, keys, 0);
   return `SAR ${Number(value || 0).toFixed(2)}`;
@@ -152,16 +198,16 @@ function renderTracking(order) {
     <div class="detail-grid">
       <div class="detail-box"><span>رقم الطلب</span><strong>${escapeHtml(order.public_order_id)}</strong></div>
       <div class="detail-box"><span>رقم التتبع</span><strong>${escapeHtml(order.tracking_no)}</strong></div>
-      <div class="detail-box"><span>رقم طلب سلة</span><strong>${escapeHtml(getOrderValue(order, ["salla_order_number", "sallaOrderNumber"], "-"))}</strong></div>
-      <div class="detail-box"><span>شركة التقسيط</span><strong>${escapeHtml(getOrderValue(order, ["bnpl_provider_name", "bnplProviderName", "provider_name"], "-"))}</strong></div>
+      <div class="detail-box"><span>رقم طلب سلة</span><strong>${escapeHtml(getSallaOrderNumber(order))}</strong></div>
+      <div class="detail-box"><span>شركة التقسيط</span><strong>${escapeHtml(getOrderValue(order, ["financing.provider_name", "financing.providerName", "bnpl_provider_name", "bnplProviderName", "provider_name"], "-"))}</strong></div>
       <div class="detail-box"><span>الحالة</span><strong>${escapeHtml(order.status_label || order.status_code)}</strong></div>
       <div class="detail-box"><span>آخر تحديث</span><strong>${getOrderDate(order, ["updated_at", "updatedAt", "created_at", "createdAt"])}</strong></div>
       <div class="detail-box"><span>مبلغ الفاتورة</span><strong>${getOrderAmount(order, ["quote_snapshot.invoice_amount", "quote_snapshot.invoiceAmount", "quoteSnapshot.invoiceAmount", "invoice_amount", "invoiceAmount"])}</strong></div>
       <div class="detail-box"><span>الإجمالي</span><strong>${getOrderAmount(order, ["quote_snapshot.total_amount", "quote_snapshot.totalAmount", "quoteSnapshot.totalAmount", "total_amount", "totalAmount"])}</strong></div>
-      <div class="detail-box"><span>رقم الموافقة</span><strong>${escapeHtml(getOrderValue(order, ["bnpl_approval_reference", "bnplApprovalReference"], "-"))}</strong></div>
-      <div class="detail-box"><span>حالة التحصيل</span><strong>${escapeHtml(getOrderValue(order, ["collection_status", "collectionStatus"], "-"))}</strong></div>
-      <div class="detail-box"><span>مزامنة سلة</span><strong>${escapeHtml(getOrderValue(order, ["salla_sync_status", "sallaSyncStatus"], "-"))}</strong></div>
-      <div class="detail-box"><span>مزامنة شركة التقسيط</span><strong>${escapeHtml(getOrderValue(order, ["finance_provider_sync_status", "financeProviderSyncStatus"], "-"))}</strong></div>
+      <div class="detail-box"><span>رقم الموافقة</span><strong>${escapeHtml(getOrderValue(order, ["financing.approval_reference", "bnpl_approval_reference", "bnplApprovalReference"], "-"))}</strong></div>
+      <div class="detail-box"><span>حالة التحصيل</span><strong>${escapeHtml(translateStatus(getOrderValue(order, ["collection.status_label", "collection_status_label", "collection.status", "collection_status", "collectionStatus"], "-")))}</strong></div>
+      <div class="detail-box"><span>مزامنة سلة</span><strong>${escapeHtml(translateSyncStatus(getOrderValue(order, ["salla.sync_status_label", "salla.syncStatusLabel", "salla.sync_status", "salla.syncStatus", "salla_sync_status_label", "salla_sync_status", "sallaSyncStatus"], "-")))}</strong></div>
+      <div class="detail-box"><span>مزامنة شركة التقسيط</span><strong>${escapeHtml(translateSyncStatus(getOrderValue(order, ["provider_sync.status_label", "provider_sync.status", "finance_provider_sync_status", "financeProviderSyncStatus"], "-")))}</strong></div>
     </div>
     <div class="tracking-feedback-loop">${feedbackLoop}</div>
     <div class="tracking-timeline">${timeline}</div>

@@ -11,8 +11,26 @@ const successTrackingLink = document.getElementById("successTrackingLink");
 const successResolutionNote = document.getElementById("successResolutionNote");
 const successPanel = document.getElementById("sadadySuccessPanel");
 
-function buildSameThemeUrl(params = {}) {
-  const url = new URL(window.location.href);
+const STATUS_LABELS = {
+  pending: "بانتظار التحصيل",
+  pending_payment_capture: "بانتظار الدفع في سلة",
+  paid: "تم الدفع",
+  collected: "تم التحصيل",
+  captured: "تم التحصيل",
+  failed: "فشل التحصيل",
+  canceled: "ملغي",
+  cancelled: "ملغي",
+  expired: "منتهي",
+  draft: "مسودة",
+  synced: "تمت المزامنة",
+  sync_pending: "بانتظار المزامنة",
+  skipped: "لم تتم المزامنة",
+  ignored: "تم التجاهل",
+  not_required: "غير مطلوبة",
+};
+
+function buildThemeUrl(pathname, params = {}) {
+  const url = new URL(pathname, window.location.origin);
   Object.entries(params).forEach(([key, value]) => {
     if (value === null || value === undefined || value === "") {
       url.searchParams.delete(key);
@@ -21,6 +39,34 @@ function buildSameThemeUrl(params = {}) {
     }
   });
   return `${url.pathname}${url.search}${url.hash || ""}`;
+}
+
+function translateStatus(value, fallback = "-") {
+  const text = String(value ?? "").trim();
+  if (!text || text === "-") return fallback;
+  const key = text.toLowerCase().replace(/\s+/g, "_").replaceAll("-", "_");
+  return STATUS_LABELS[key] || text;
+}
+
+function translateSyncStatus(value, fallback = "-") {
+  const text = String(value ?? "").trim();
+  if (!text || text === "-") return fallback;
+  const key = text.toLowerCase().replace(/\s+/g, "_").replaceAll("-", "_");
+  return {
+    pending: "بانتظار المزامنة",
+    synced: "تمت المزامنة",
+    failed: "فشلت المزامنة",
+    skipped: "لم تتم المزامنة",
+    ignored: "تم التجاهل",
+    not_required: "غير مطلوبة",
+    draft: "مسودة",
+  }[key] || STATUS_LABELS[key] || text;
+}
+
+function getSallaOrderNumber(order) {
+  const value = String(getOrderValue(order, ["salla.order_number", "salla.orderNumber", "salla_order_number", "sallaOrderNumber", "salla_order_id"], "")).trim();
+  if (!value || /^draft-/i.test(value)) return "-";
+  return value;
 }
 
 function getOrderValue(order, keys, fallback = "-") {
@@ -40,20 +86,20 @@ function applyOrderSummary(order) {
   if (successTrackingNumber) successTrackingNumber.textContent = order.tracking_no || "-";
   if (successStatus) successStatus.textContent = order.status_label || order.status_code || "تم حفظ الرحلة داخل سلة";
   if (successSallaOrderNumber) {
-    successSallaOrderNumber.textContent = getOrderValue(order, ["salla.orderNumber", "salla_order_number", "sallaOrderNumber"], "-");
+    successSallaOrderNumber.textContent = getSallaOrderNumber(order);
   }
   if (successProviderName) {
     successProviderName.textContent = getOrderValue(
       order,
-      ["financing.providerName", "bnpl_provider_name", "bnplProviderName", "provider_name"],
+      ["financing.provider_name", "financing.providerName", "bnpl_provider_name", "bnplProviderName", "provider_name"],
       "-",
     );
   }
   if (successCollectionStatus) {
-    successCollectionStatus.textContent = getOrderValue(order, ["collection.status", "collection_status", "collectionStatus"], "-");
+    successCollectionStatus.textContent = translateStatus(getOrderValue(order, ["collection.status_label", "collection_status_label", "collection.status", "collection_status", "collectionStatus"], "-"));
   }
   if (successSallaSyncStatus) {
-    successSallaSyncStatus.textContent = getOrderValue(order, ["salla.syncStatus", "salla_sync_status", "sallaSyncStatus"], "-");
+    successSallaSyncStatus.textContent = translateSyncStatus(getOrderValue(order, ["salla.sync_status_label", "salla.syncStatusLabel", "salla.sync_status", "salla.syncStatus", "salla_sync_status_label", "salla_sync_status", "sallaSyncStatus"], "-"));
   }
 }
 
@@ -117,7 +163,7 @@ async function loadOrderSummary() {
       },
     });
     setResolutionNote("تم حفظ ملخص الرحلة محليًا. ستظهر البيانات النهائية هنا بعد اكتمال الإرجاع من مسار سدادي أو من سلة.");
-    if (successTrackingLink) successTrackingLink.href = buildSameThemeUrl({ sadady_success: "1", tracking_no: journey.tracking_no || "" });
+    if (successTrackingLink) successTrackingLink.href = buildThemeUrl("/tracking", { tracking_no: journey.tracking_no || "" });
     return;
   }
 
@@ -130,7 +176,7 @@ async function loadOrderSummary() {
     const order = await getTracking(lookupValue);
     applyOrderSummary(order);
     setResolutionNote("تم تحميل ملخص الطلب من واجهة سدادي بنجاح، ويمكنك متابعة آخر حالاته من صفحة التتبع.");
-    if (successTrackingLink) successTrackingLink.href = buildSameThemeUrl({ sadady_success: "1", tracking_no: order.tracking_no });
+    if (successTrackingLink) successTrackingLink.href = buildThemeUrl("/tracking", { tracking_no: order.tracking_no });
   } catch {
     setResolutionNote("تعذر جلب تفاصيل الطلب الآن. يمكنك إعادة المحاولة من صفحة التتبع أو الرجوع إلى طلباتك داخل سلة.");
   }
