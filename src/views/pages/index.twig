@@ -6,6 +6,11 @@
   {% include "components.sadady.home.hero-banner" %}
   {% include "components.sadady.home.service-modes" %}
   {% include "components.sadady.home.information-sections" %}
+  <div id="sadadySuccessPanel" hidden>
+    <main class="journey-page">
+      {% include "components.sadady.journey.success-card" %}
+    </main>
+  </div>
   {% include "components.sadady.home.request-modal" %}
 {% endblock %}
 
@@ -13,4 +18,5 @@
   <script type="module" src="{{ 'js/sadady/live-home.js' | asset }}"></script>
   <script type="module" src="{{ 'js/sadady/quote-flow.js' | asset }}"></script>
   <script type="module" src="{{ 'js/sadady/checkout-flow.js' | asset }}"></script>
+  <script type="module" src="{{ 'js/sadady/thank-you.js' | asset }}"></script>
 {% endblock %}

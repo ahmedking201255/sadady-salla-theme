@@ -5,8 +5,16 @@ const loginHint = document.getElementById("loginHint");
 
 const isLocalPreview = window.location.pathname.startsWith("/theme-preview");
 const previewPrefix = isLocalPreview ? "/theme-preview" : "";
-const CUSTOMER_ORDERS_URL = `${previewPrefix}/customer/orders/`;
-const CUSTOMER_LOGIN_URL = isLocalPreview ? `${previewPrefix}/customer/orders/` : "/customer/login";
+
+function getSallaPreviewPrefix() {
+  const match = window.location.pathname.match(/^\/dev-[^/]+/);
+  return match ? match[0] : previewPrefix;
+}
+
+function buildThemePath(path) {
+  const prefix = getSallaPreviewPrefix();
+  return `${prefix}${path.startsWith("/") ? path : `/${path}`}`;
+}
 
 function syncCustomerButton() {
   const session = getSession();
@@ -39,7 +47,7 @@ goToCustomerBtn?.addEventListener("click", () => {
     });
     session = getSession();
   }
-  window.location.href = session ? CUSTOMER_ORDERS_URL : CUSTOMER_LOGIN_URL;
+  window.location.href = session ? buildThemePath("/customer/orders/") : buildThemePath("/customer/login");
 });
 
 window.addEventListener("sadady:auth-success", syncCustomerButton);

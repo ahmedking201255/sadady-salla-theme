@@ -11,6 +11,14 @@ function setCheckoutMessage(message, type = "error") {
   summaryNote.textContent = message;
 }
 
+function buildSameThemeSuccessUrl(order) {
+  const url = new URL(window.location.href);
+  url.searchParams.set("sadady_success", "1");
+  url.searchParams.set("tracking_no", order.tracking_no || "");
+  url.searchParams.set("public_order_id", order.public_order_id || "");
+  return `${url.pathname}${url.search}${url.hash || ""}`;
+}
+
 toCompleteBtn?.addEventListener("click", async () => {
   const journey = getCurrentJourney();
   if (!journey?.quote?.quote_id) {
@@ -46,9 +54,12 @@ toCompleteBtn?.addEventListener("click", async () => {
       quote_snapshot: journey.quote.breakdown,
     });
     const checkout = await checkoutOrder(precreated.public_order_id, { channel: "theme_web" });
-    const fallbackTrackingUrl = `/thank-you?tracking_no=${encodeURIComponent(precreated.tracking_no || checkout.tracking_no || "")}&public_order_id=${encodeURIComponent(precreated.public_order_id || checkout.public_order_id || "")}`;
+    const successUrl = buildSameThemeSuccessUrl({
+      tracking_no: precreated.tracking_no || checkout.tracking_no || "",
+      public_order_id: precreated.public_order_id || checkout.public_order_id || "",
+    });
     clearCurrentJourney();
-    window.location.href = checkout.checkout_url || fallbackTrackingUrl;
+    window.location.href = successUrl;
   } catch (error) {
     setCheckoutMessage(error.message || "تعذر إتمام الطلب.");
   } finally {

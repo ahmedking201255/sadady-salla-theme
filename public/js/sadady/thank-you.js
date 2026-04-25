@@ -9,6 +9,19 @@ const successCollectionStatus = document.getElementById("successCollectionStatus
 const successSallaSyncStatus = document.getElementById("successSallaSyncStatus");
 const successTrackingLink = document.getElementById("successTrackingLink");
 const successResolutionNote = document.getElementById("successResolutionNote");
+const successPanel = document.getElementById("sadadySuccessPanel");
+
+function buildSameThemeUrl(params = {}) {
+  const url = new URL(window.location.href);
+  Object.entries(params).forEach(([key, value]) => {
+    if (value === null || value === undefined || value === "") {
+      url.searchParams.delete(key);
+    } else {
+      url.searchParams.set(key, value);
+    }
+  });
+  return `${url.pathname}${url.search}${url.hash || ""}`;
+}
 
 function getOrderValue(order, keys, fallback = "-") {
   for (const key of keys) {
@@ -74,6 +87,13 @@ function setResolutionNote(message) {
 
 async function loadOrderSummary() {
   const query = new URLSearchParams(window.location.search);
+  const shouldRenderInlineSuccess = query.get("sadady_success") === "1";
+  if (successPanel && !shouldRenderInlineSuccess) return;
+  if (successPanel) {
+    successPanel.hidden = false;
+    window.setTimeout(() => successPanel.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
+  }
+
   const trackingNo = query.get("tracking_no");
   const publicOrderId = query.get("public_order_id");
   const lookupValue = trackingNo || publicOrderId;
@@ -97,7 +117,7 @@ async function loadOrderSummary() {
       },
     });
     setResolutionNote("تم حفظ ملخص الرحلة محليًا. ستظهر البيانات النهائية هنا بعد اكتمال الإرجاع من مسار سدادي أو من سلة.");
-    if (successTrackingLink) successTrackingLink.href = "/customer/orders";
+    if (successTrackingLink) successTrackingLink.href = buildSameThemeUrl({ sadady_success: "1", tracking_no: journey.tracking_no || "" });
     return;
   }
 
@@ -110,7 +130,7 @@ async function loadOrderSummary() {
     const order = await getTracking(lookupValue);
     applyOrderSummary(order);
     setResolutionNote("تم تحميل ملخص الطلب من واجهة سدادي بنجاح، ويمكنك متابعة آخر حالاته من صفحة التتبع.");
-    if (successTrackingLink) successTrackingLink.href = `/tracking?tracking_no=${encodeURIComponent(order.tracking_no)}`;
+    if (successTrackingLink) successTrackingLink.href = buildSameThemeUrl({ sadady_success: "1", tracking_no: order.tracking_no });
   } catch {
     setResolutionNote("تعذر جلب تفاصيل الطلب الآن. يمكنك إعادة المحاولة من صفحة التتبع أو الرجوع إلى طلباتك داخل سلة.");
   }
